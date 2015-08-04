@@ -1,0 +1,6 @@
+http://bio2rdf.org/pharmgkb_vocabulary:Drug
+pharmgkb Drug Ref
+select distinct(?reco) where {
+	?r <http://bio2rdf.org/pharmgkb_vocabulary:drug> <%s>.
+	?r <http://bio2rdf.org/pharmgkb_vocabulary:article> ?reco.
+} limit 5

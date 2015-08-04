@@ -1,0 +1,6 @@
+http://bio2rdf.org/pharmgkb_vocabulary:Disease
+pharmgkb Disease Ref
+select distinct(?reco) where {
+	?r <http://bio2rdf.org/pharmgkb_vocabulary:disease> <%s>.
+	?r <http://bio2rdf.org/pharmgkb_vocabulary:article> ?reco.
+} limit 5

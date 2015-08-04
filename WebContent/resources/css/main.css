@@ -1,0 +1,349 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	padding-top: 100px;
+	overflow-x: hidden;
+	background-color: #ffffff;
+}
+
+a {
+	cursor: pointer;
+}
+
+#pagination,#resultPane,#resultInfo,#browseTrace,
+#progressBar,#recommendPane,#facetFilterPane,#intelligencePane {
+	display: none;
+}
+
+#progressBar {
+	position: relative;
+	top: 100px;
+}
+
+.container {
+	width: 90%;
+	min-width: 960px;
+}
+
+.text-core {
+	float: left;
+}
+
+#iconSearch {
+	position: relative;
+	left: -14px;	
+}
+
+#resultPane li {
+	list-style: square;
+}
+
+#searchPane {
+	margin-left: auto;
+	margin-right: auto;
+	width: 720px;
+	margin-bottom: 20px;
+}
+
+#searchInput {
+	width: 640px;
+}
+
+#searchBtnGroup {	
+	position: relative;
+	top: 0px;
+	left: 650px;	
+}
+
+.hitted {
+	color: #DD4B39;
+}
+
+#leftPane {
+	border: 1px solid #CCC;
+}
+
+#middlePane {
+	border: 1px solid #CCC;
+}
+
+#rightPane {
+	border: 1px solid #CCC;
+}
+
+#instanceImg {
+	/*max-height: 300px;*/
+}
+
+code {
+	cursor: pointer;
+	display: inline-table;
+	border: 1px dashed;
+	margin-right: 4px;
+	margin-bottom: 1px;
+}
+
+code:hover {
+	background-color: #D14;
+	color: #fff;
+	border: 1px dashed #FFF;
+}
+
+code.selected {
+	background-color: #D14;
+	color: #fff;
+	border: 1px solid #FFF;
+}
+
+#viewOption code {
+	display: block;
+	margin: 5px;
+}
+
+.filterInput {
+	width: 41px;
+	margin-top: 9px;
+}
+
+.filterSelect {
+	width: 115px;
+	margin-top: 9px;
+}
+
+.filterInputDiv {
+	display: none;
+}
+
+#propertyFilterTagPane {
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.label-class {
+	background-color: #1d4;
+}
+
+.label-property {
+	background-color: #d14;
+}
+
+.label-source {
+	background-color: #a1d;
+}
+
+.label-plain {
+	background-color: #1ad;
+}
+
+.popBtn {
+	background: transparent;
+	border: 0;
+	padding: 2px;
+	cursor: pointer;
+	opacity: 0.2;
+	filter: alpha(opacity=20);
+}
+
+.popBtn:hover {
+	opacity: 0.4;
+	filter: alpha(opacity=40);
+	
+}
+.navbar .brand {
+	padding-right: 0;
+	padding-left: 0;
+	margin-left: 20px;
+	float: right;
+	font-weight: bold;
+	color: black;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .1), 0 0 30px rgba(255, 255, 255, .125);
+	-webkit-transition: all .2s linear;
+	-moz-transition: all .2s linear;
+	transition: all .2s linear;
+}
+
+.title {
+	text-shadow: 2px 2px 3px rgba(0, 0, 0, .4), 0 0 30px rgba(0, 0, 0, .075);
+}
+
+.jPaginate {
+    height: 34px;
+    position: relative;
+    color: #a5a5a5;
+    font-size: 16px;   
+	width: 120%;
+}
+
+.jPaginate a {
+    line-height: 15px;
+    height: 18px;
+    cursor: pointer;
+    padding: 2px 5px;
+    margin: 2px;
+    float: left;
+}
+
+.jPag-control-back {
+	position: absolute;
+	left: 0px;
+}
+
+.jPag-control-front {
+	position: absolute;
+	top: 0px;
+}
+
+.jPaginate span {
+    cursor: pointer;
+}
+
+ul.jPag-pages {
+    float: left;
+    list-style-type: none;
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+}
+
+ul.jPag-pages li {
+    display: inline;
+    float: left;
+    padding: 0px;
+    margin: 0px;
+}
+
+ul.jPag-pages li a {
+    float: left;
+    padding: 2px 5px;
+}
+
+span.jPag-current {
+    cursor: default;
+    font-weight: normal;
+    line-height: 15px;
+    height: 18px;
+    padding: 2px 5px;
+    margin: 2px;
+    float: left;
+}
+
+ul.jPag-pages li span.jPag-previous,
+ul.jPag-pages li span.jPag-next,
+span.jPag-sprevious,
+span.jPag-snext,
+ul.jPag-pages li span.jPag-previous-img,
+ul.jPag-pages li span.jPag-next-img,
+span.jPag-sprevious-img,
+span.jPag-snext-img {
+    height: 22px;
+    margin: 2px;
+    float: left;
+    line-height: 18px;
+}
+
+ul.jPag-pages li span.jPag-previous, 
+ul.jPag-pages li span.jPag-previous-img {
+    margin: 2px 0px 2px 2px;
+    font-size: 12px;
+    font-weight: bold;
+    width: 10px;
+
+}
+
+ul.jPag-pages li span.jPag-next, 
+ul.jPag-pages li span.jPag-next-img {
+    margin: 2px 2px 2px 0px;
+    font-size: 12px;
+    font-weight: bold;
+    width: 10px;
+}
+
+span.jPag-sprevious, 
+span.jPag-sprevious-img {
+    margin: 2px 0px 2px 2px;
+    font-size: 18px;
+    width: 15px;
+    text-align: right;
+}
+
+span.jPag-snext, 
+span.jPag-snext-img {
+    margin: 2px 2px 2px 0px;
+    font-size: 18px;
+    width: 15px;
+     text-align: right;
+}
+
+ul.jPag-pages li span.jPag-previous-img {
+    background: transparent url(../images/previous.png) no-repeat center right;
+}
+
+ul.jPag-pages li span.jPag-next-img {
+    background: transparent url(../images/next.png) no-repeat center left;
+}
+
+span.jPag-sprevious-img {
+    background: transparent url(../images/sprevious.png) no-repeat center right;
+}
+
+span.jPag-snext-img {
+    background: transparent url(../images/snext.png) no-repeat center left;
+}
+
+.typeSpan, .typeSpan a {
+	color: green;
+}
+
+.sourceSpan {
+}
+
+.resultLabel {
+	font-size: 18px;
+}
+
+.resultLi {
+	background-position: center;
+	background-size: 150px;
+	background-repeat: no-repeat;
+	margin-top: 10px;
+	background-position-x: 80%;
+}
+
+.instType {
+	display: block;
+	margin-top: -10px;
+	margin-bottom: 10px;
+}
+
+/*
+.parent a {
+	color: #333;
+}
+
+.child a {
+	color: #08C;
+}
+*/
+
+.traceRel {
+	position: relative;
+	top: 3px;
+	color: #999;
+	font-size: 12px;
+}
+
+.parent.expanded {
+	list-style-image: url("../img/minus.gif");
+}
+
+.parent.collapsed {
+	list-style-image: url("../img/plus.gif");
+}
+
+.child {
+	list-style-type: disc;
+	list-style-image: none;
+}
+
+.aExpande {
+	margin-left: -20px;
+	padding-left: 20px;
+}

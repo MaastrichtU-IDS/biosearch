@@ -1,0 +1,4 @@
+http://bio2rdf.org/mesh_vocabulary:Resource http://semanticscience.org/resource/SIO_000000
+http://bio2rdf.org/mesh_vocabulary:Descriptor http://semanticscience.org/resource/SIO_000133
+http://bio2rdf.org/mesh_vocabulary:Qualifier-Descriptor http://semanticscience.org/resource/SIO_000133
+http://bio2rdf.org/mesh_vocabulary:Supplementary-Descriptor http://semanticscience.org/resource/SIO_000133

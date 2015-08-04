@@ -1,0 +1,6 @@
+http://bio2rdf.org/drugbank_vocabulary:Drug
+Drug Interaction
+select distinct(?reco) where {
+	<%s> <http://bio2rdf.org/drugbank_vocabulary:ddi-interactor-in> ?o.
+	?reco <http://bio2rdf.org/drugbank_vocabulary:ddi-interactor-in> ?o.
+} limit 3

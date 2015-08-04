@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<meta name="google-signin-client_id" content="648389821688-j632kn26kc49imfd5duvv937ursu9hl5.apps.googleusercontent.com" />
+
+	<meta name="author" content="Wei Hu" />
+    <meta name="author" content="Honglei Qiu" />
+    <meta name="author" content="Cunxin Jia" />
+    <meta name="author" content="Michel Dumontier" />
+    <meta name="keywords" content="BioSearch, Search Engine, Life Sciences, Linked Data" />
+
+	<title>BioSearch</title>	
+	<link href="vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="vendors/jquery/jquery-ui.css" rel="stylesheet" />	
+	<link href="resources/css/index.css" rel="stylesheet" />			
+</head>
+<body>
+	<div class="navbar navbar-default navbar-fixed-top" style="background-color:#4D0099">
+      <div class="navbar-inner">
+        <div class="container">
+		<a class="navbar-brand" href="./index.html" style="color:#FFFFFF">BioSearch</a>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="inactive"><a href="http://ws.nju.edu.cn" style="color:#FFFFFF">Websoft Research Group</a></li>
+              <li class="inactive"><a href="http://dumontierlab.stanford.edu" style="color:#FFFFFF">Dumontier Laboratory</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	<div class="container">
+		<h1 id="title"><strong>BioSearch</strong></h1>
+		<p id="desc">A Semantic Search Engine for the Life Science Linked Data</p>
+		
+
+		<div id="contentPane" class="well" style="margin-top: 30px;">	
+			<div id="searchPane">				
+				<textarea id="searchInput" rows="1" cols=""></textarea>			
+				<div id="searchBtnGroup" class="btn-group">
+					<button id="searchBtn" class="btn btn-primary">
+						<i class="glyphicon glyphicon-search"></i> 
+						<span>Search</span>
+					</button>	
+				</div>			
+			</div>
+		</div>
+	
+		<div class="alert alert-info">
+			<strong>How to use:</strong> 
+				<ul>
+					<li>Press <strong>&lt;SPACE&gt;</strong> to convert your text to a case-insensitive keyword, e.g. <a class="label label-plain">penicillin</a></li>
+					<li>Faceted filters begin with <a class="label label-class">C:</a> for classes, <a class="label label-property">P:</a> for properties and <a class="label label-source">S:</a> for datasets, e.g. <a class="label label-class">C:drug</a> <a class="label label-property">P:label</a> <a class="label label-source">S:kegg</a></li>
+					<li>For bug report or information inquiry, please click <a href="mailto:whu@nju.edu.cn">here</a>.</li>
+				</ul>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="vendors/jquery/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="vendors/bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="vendors/js/textext.js"></script>
+	<script type="text/javascript" src="vendors/jquery/jquery-ui.js"></script>
+	<script type="text/javascript" src="resources/js/searchPane.js"></script>
+	<script type="text/javascript" src="resources/js/index.js"></script>
+</body>
+</html>

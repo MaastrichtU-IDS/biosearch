@@ -1,0 +1,5 @@
+http://bio2rdf.org/omim_vocabulary:Resource http://semanticscience.org/resource/SIO_000000
+http://bio2rdf.org/omim_vocabulary:Gene http://semanticscience.org/resource/SIO_010035
+http://bio2rdf.org/omim_vocabulary:Gene-phenotype http://semanticscience.org/resource/SIO_010035
+http://bio2rdf.org/omim_vocabulary:Phenotype http://semanticscience.org/resource/SIO_010056
+http://bio2rdf.org/omim_vocabulary:Predominantly-phenotypes http://semanticscience.org/resource/SIO_010056

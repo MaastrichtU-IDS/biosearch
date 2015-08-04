@@ -1,0 +1,10 @@
+http://bio2rdf.org/drugbank_vocabulary:Resource http://semanticscience.org/resource/SIO_000000
+http://bio2rdf.org/drugbank_vocabulary:Drug http://semanticscience.org/resource/SIO_010038
+http://bio2rdf.org/drugbank_vocabulary:Drug http://semanticscience.org/resource/SIO_011125
+http://bio2rdf.org/drugbank_vocabulary:Target http://semanticscience.org/resource/SIO_010423
+http://bio2rdf.org/drugbank_vocabulary:Target http://semanticscience.org/resource/SIO_011125
+http://bio2rdf.org/drugbank_vocabulary:Enzyme http://semanticscience.org/resource/SIO_010343
+http://bio2rdf.org/drugbank_vocabulary:Enzyme http://semanticscience.org/resource/SIO_011125
+http://bio2rdf.org/drugbank_vocabulary:Small-molecule http://semanticscience.org/resource/SIO_011125
+http://bio2rdf.org/drugbank_vocabulary:Toxicity http://semanticscience.org/resource/SIO_001008
+http://bio2rdf.org/drugbank_vocabulary:Drug-Drug-Interaction http://semanticscience.org/resource/SIO_001006

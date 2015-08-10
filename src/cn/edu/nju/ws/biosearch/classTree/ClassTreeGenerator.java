@@ -42,23 +42,10 @@ public class ClassTreeGenerator {
 				label = namespace + " " + label;
 				OntManager.getInstance().registerClassLabel(label, uri);
 				TreeNode node = new TreeNode(label, count, uri);
-//				ClassTree subTree = constructSubTree(cls);
-//				node.setSubTree(subTree);
 				classTree.addNode(node);
 			}
 		}
-//		List<OntClass> clsList = OntManager.getInstance().listTopClasses();
-//		for(OntClass cls : clsList) {
-//			String uri = cls.getURI();
-//			int count = getClassCount(uri);
-//			if(count > 0) {
-//				String label = cls.getLabel(null);
-//				TreeNode node = new TreeNode(label, count);
-//				ClassTree subTree = constructSubTree(cls);
-//				node.setSubTree(subTree);
-//				classTree.addNode(node);
-//			}
-//		}
+
 		classTree.sortNodes();
 		return classTree;
 	}

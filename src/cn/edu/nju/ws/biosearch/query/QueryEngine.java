@@ -34,7 +34,7 @@ public class QueryEngine {
 		for(String source : sources) {
 			SPARQLQueryExecutor executor = ExecutorManager.getInstance().getExecutor(source);
 			String queryString = QueryConstructor.constructQuery(keywords, classes, properties, source);
-			System.out.printf("%s\t%s\n", source, queryString);
+//			System.out.printf("%s\t%s\n", source, queryString);
 			if(executor == null) continue;
 			ResultSet rs = executor.execSelect(queryString);
 			if(rs == null) continue;

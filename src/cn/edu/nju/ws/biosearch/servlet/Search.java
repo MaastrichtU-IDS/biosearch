@@ -70,6 +70,7 @@ public class Search extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String requestString = request.getParameter("q");
+		requestString = deleteSpace(requestString);
 		String isBoolean = request.getParameter("bool");
 		requestString = URLDecoder.decode(requestString, "UTF-8");
 		long start = 0, end = 0;
@@ -105,6 +106,10 @@ public class Search extends HttpServlet {
 		response.getWriter().print(resultJSON);
 	}
 	
+	private String deleteSpace(String str) {
+		str = str.replace("%C2%A0", "");
+		return str;
+	}
 	private List<ResultItem> getBooleanQueryResultList(String booleanRequest) {
 		// TODO Auto-generated method stub
 		return null;
@@ -167,6 +172,7 @@ public class Search extends HttpServlet {
 			}
 		}
 		else {
+			requestItem = requestItem.trim();
 			reqPlainList.add(requestItem);
 		}
 	}

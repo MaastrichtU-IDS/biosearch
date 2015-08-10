@@ -120,7 +120,6 @@ function constructSentenceTree(tree) {
 }
 
 function liAppend(subtreeLiElement, ns, isObject, prop) {
-//	console.log(ns);
 	if(ns.indexOf('http://bio2rdf.org/') >= 0 && ns.indexOf('x-') >= 0) {
 		if(prop.indexOf('is-x-') >= 0) {
 			$('#GXIP').append(subtreeLiElement);
@@ -495,7 +494,6 @@ function constructRDFOutput() {
 	}).appendTo(centerElement);
 	
 	var uriLN = getLocalName(uri);
-//	console.log(uriLN);
 	var openlifedataPre = 'http://openlifedata.org/';
 	
 	
@@ -612,29 +610,19 @@ function appendGroups(ulElement) {
 }
 
 function dropTail(prop, value) {
-/*	var tails = ['[drugbank_vocabulary'];
-	$.each(tails, function(index, tail) {
-		if(value.indexOf(tail) >= 0) {
-			value = value.substring(0, value.indexOf(tail));
-		}
-	});*/
 	if(prop == 'label') return value;
 	var reg = new RegExp(".*\\[.*\\](</a>)?$");
 	if(reg.test(value)) {
-//		console.log(value);
 		var regg = new RegExp("\\[.*\\](</a>)?$");
 		value = value.replace(regg, "</a>");
-//		console.log(value);
 	}
 	return value;
 }
 
 function dropMark(prop, value) {
 	if(prop.indexOf('x-') < 0) {
-//		console.log("??"+prop);
 		return prop;
 	}
-//	console.log(prop);
 	var reg = new RegExp(".*\\([0-9]*\\).*");
 	if(reg.test(prop)) {
 		var regg = new RegExp("\\([0-9]*\\)")
@@ -648,12 +636,10 @@ function dropMark(prop, value) {
 		else if(value.indexOf('interpro') >= 0) source = 'interpro';
 		else if(value.indexOf('ncbigene') >= 0) source = 'ncbigene';
 		else if(value.indexOf('orphanet') >= 0) source = 'orphanet';
-//		else console.log(source);
 		prop = "in-link from " + source; 
 	} else {
 		prop = "out-link to " + prop.substring(2, prop.length);
 	}
-//	console.log(prop);
 	return prop;
 }
 

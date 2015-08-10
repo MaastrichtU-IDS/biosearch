@@ -242,6 +242,7 @@ function setResultInfo() {
 	var propertyKeys = new Array();
 	var sourceKeys = new Array();
 	$.each(keywords, function(index,value) {
+		value = value.replace(/(^\s*)|(\s*$)/g, "");
 		if(value.indexOf('P:') === 0 || value.indexOf('p:') === 0) {
 			propertyKeys.push(value);
 			var splitFrom = value.indexOf('=');

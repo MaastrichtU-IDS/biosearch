@@ -1,6 +1,8 @@
 package cn.edu.nju.ws.biosearch.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -94,60 +96,35 @@ public class ListClassesAndProperties extends HttpServlet {
 //			KeywordSearcher searcher = KeywordSearcher.getInstance();
 			List<OntClass> classes = om.listClasses();
 			List<OntProperty> props = om.listProperties();
+			List<String> items = new ArrayList<String>();
 			JSONArray array = new JSONArray();
 			
 			for(OntClass cls : classes) {
 				if(OntMappingService.isMapped(cls.getURI())) {
-					JSONObject item = new JSONObject();
-					item.put("label", "C:" + cls.getLabel(null));
-					item.put("value", "C:" + cls.getLabel(null));
-					//array.add("C:" + cls.getLabel(null));
-					array.add(item);
+					items.add("C:" + cls.getLabel(null));
 				}
 			}
 			
 			for(OntProperty prop : props) {
 				String propLabel = prop.getLabel(null);
 				if(propLabel != null && !propLabel.trim().equals("")) {
-					JSONObject item = new JSONObject();
-					item.put("label", "P:" + propLabel);
-					item.put("value", "P:" + propLabel);
-					array.add(item);
-//					if(om.isCompoundValueProperty(prop.getURI())) {
-				//		array.add("P:" + propLabel + "=?");
-				//		array.add("P:" + propLabel + "=[]");
-//						JSONObject item1 = new JSONObject();
-//						JSONObject item2 = new JSONObject();
-//						item1.put("label", "P:" + propLabel + "=?");
-//						item1.put("value", "P:" + propLabel + "=?");
-//						array.add(item1);
-//						item2.put("label", "P:" + propLabel + "=[]");
-//						item2.put("value", "P:" + propLabel + "=[]");
-//						array.add(item2);
-//					}
+					items.add("P:" + propLabel);
 				}
 			}
-//			Set<String> insts = searcher.listInstanceLabel();
-//			for(String inst : insts) {
-//				String[] splitted = inst.split("\t");
-//				if(splitted.length == 2) {
-//					String name = splitted[0];
-//					String type = splitted[1];
-//					JSONObject item = new JSONObject();
-//					item.put("label", name + "[" + type + "]");
-//					item.put("value", name);
-//					array.add(item);
-//				}
-//			}
 			
 			Set<String> sources = DataSourceManager.getInstance().listSourceNames();
 			for(String source : sources) {
-				JSONObject item = new JSONObject();
-				item.put("label", "S:" + source);
-				item.put("value", "S:" + source);
-				array.add(item);
+				items.add("S:" + source);
 			}
-
+			
+			Collections.sort(items);
+			for(String item : items) {
+				JSONObject it = new JSONObject();
+				it.put("label", item);
+				it.put("value", item);
+				array.add(it);
+			}
+			
 			response.getWriter().print(array.toString());
 		}
 	}

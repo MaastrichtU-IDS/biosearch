@@ -22,69 +22,71 @@ import com.hp.hpl.jena.shared.JenaException;
  * @author "Cunxin Jia"
  *
  */
-public class DataSourceManager implements IDataSource {
+public class WebsoftDataSourceManager implements IDataSource {
 	
-	private static DataSourceManager inst = null;
+	private static WebsoftDataSourceManager inst = null;
 	private Set<String> sourceNames;
-	private String url;
-	private String user;
-	private String passwd;
+	private Map<String, String> urlMap;
 	private Map<String, String> graphMap;
+	private Map<String, String> userMap;
+	private Map<String, String> passwdMap;
 	
-	public static DataSourceManager getInstance() {
+	public static WebsoftDataSourceManager getInstance() {
 		if(inst == null) {
-			inst = new DataSourceManager();
+			inst = new WebsoftDataSourceManager();
 		}
 		return inst;
 	}
 	
-	private DataSourceManager() {
+	private WebsoftDataSourceManager() {
 		initContainers();
 		readConfig();
 	}
 	
 	private void initContainers() {
 		sourceNames = new HashSet<String>();
+		urlMap = new HashMap<String, String> ();
 		graphMap = new HashMap<String, String> ();
-		url = "";
-		user = "";
-		passwd = "";
+		userMap = new HashMap<String, String> ();
+		passwdMap = new HashMap<String, String> ();
 	}
 	
 	private void readConfig() {
 		Properties props = new Properties();
 		try {
-			props.load(DataSourceManager.class.getClassLoader().getResourceAsStream("config/datasource.properties"));
+			props.load(DataSourceManager.class.getClassLoader().getResourceAsStream("config/datasource.properties.websoft"));
 			String sources = (String) props.get("SOURCES");
 			String[] sourcesArray = sources.split(";");
 			for(String source : sourcesArray) {
+				String url = (String) props.get(source + "_URL");
 				String graph = (String) props.get(source + "_GRAPH");
-				if(graph != null) {
+				String user = (String) props.get(source + "_USER");
+				String passwd = (String) props.get(source + "_PASSWD");
+				if(url != null && user != null && passwd != null && graph != null) {
+					urlMap.put(source, url);
 					graphMap.put(source, graph);
+					userMap.put(source, user);
+					passwdMap.put(source, passwd);
 					sourceNames.add(source);
+					System.out.println(url + "\t" + user + "\t" + passwd);
 				}
 			}
-			
-			url = (String) props.get("endpoint_URL");
-			user = (String) props.get("endpoint_USER");
-			passwd = (String) props.get("endpoint_PASSWD");
-			System.out.println(url+" "+user+" "+passwd);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public String getDataSourceURL() {
-		return url;
+	public String getDataSourceURL(String sourceName) {
+		return urlMap.get(sourceName);
 	}
 	
-	public String getDataSourceUser() {
-		return user; 
+	public String getDataSourceUser(String sourceName) {
+		return userMap.get(sourceName); 
 	}
 	
-	public String getDataSourcePassword() {
-		return passwd;
+	public String getDataSourcePassword(String sourceName) {
+		return passwdMap.get(sourceName);
 	}
 	
 	@Override
@@ -102,7 +104,7 @@ public class DataSourceManager implements IDataSource {
 	public VirtGraph getVirtGraphBySource(String source) {
 		VirtGraph conn = null;
 		try {
-			conn = new VirtGraph (graphMap.get(source), url, user, passwd);
+			conn = new VirtGraph (graphMap.get(source), urlMap.get(source), userMap.get(source), passwdMap.get(source));
 		} catch(JenaException e) {
 			//failed to connect
 			conn = null;

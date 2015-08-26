@@ -20,21 +20,24 @@ public class PropertyTree implements Comparable {
 	String property;
 	String URI;
 	String isObject;
+	String source;
 	JSONObject value;
 	List<PropertyTree> children;
 	
-	public PropertyTree (String property, String URI, String isObject) {
+	public PropertyTree (String property, String URI, String isObject, String source) {
 		this.property = property;
 		this.URI = URI;
 		this.isObject = isObject;
+		this.source = source;
 		children = new ArrayList<PropertyTree> ();
 	}
 	
-	public PropertyTree(String property, String URI, JSONObject value, String isObject) {
+	public PropertyTree(String property, String URI, JSONObject value, String isObject, String source) {
 		this.property = property;
 		this.URI = URI;
 		this.isObject = isObject;
 		this.value = value;
+		this.source = source;
 		children = new ArrayList<PropertyTree> ();
 	}
 	
@@ -50,6 +53,10 @@ public class PropertyTree implements Comparable {
 		return URI;
 	}
 	
+	public String getSource() {
+		return source;
+	}
+
 	public void addSubTree(PropertyTree subTree) {
 		children.add(subTree);
 	}
@@ -70,6 +77,9 @@ public class PropertyTree implements Comparable {
 		}
 		if(!isObject.equals("")) {
 			json.put("isObject", isObject);
+		}
+		if(!source.equals("")) {
+			json.put("source", source);
 		}
 		if(value != null)
 			json.put("value", value);

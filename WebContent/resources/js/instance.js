@@ -169,7 +169,7 @@ function liAppend(subtreeLiElement, ns, isObject, prop) {
 }
 
 function constructTreeNode(treeNode) {
-	var liElement = parseValue(treeNode['URI'], treeNode['property'], treeNode['value']);
+	var liElement = parseValue(treeNode['URI'], treeNode['property'], treeNode['value'], treeNode['source']);
 	if(treeNode['subtree']) {
 		var subtreeUlElement = $('<ul>');
 		$.each(treeNode['subtree'], function(index, val) {
@@ -182,13 +182,13 @@ function constructTreeNode(treeNode) {
 	return liElement;
 }
 
-function parseValue(URI, prop, value) {
+function parseValue(URI, prop, value, source) {
 	var valueHTML = $('<li>');
 	valueHTML.css('list-style-type', 'none');
 	if(value) {
 		if(value['single']) {
 			value['single']= dropTail(prop, value['single']);
-			prop = dropMark(prop, value['single']);
+			prop = dropMark(prop, value['single'], source);
 //			valueHTML.append($('<span>').html('<a href=' + URI + '><strong>' + prop  + '</strong></a>：' + value['single']));
 			valueHTML.append($('<span>').html('<strong title=' + URI + '>' + prop  + '</strong>：' + value['single']));
 			valueHTML.addClass('child');
@@ -197,7 +197,7 @@ function parseValue(URI, prop, value) {
 			var aElement = $('<a>', {
 				class: 'aExpande'
 			});
-			prop = dropMark(prop, value['multi'][0]);
+			prop = dropMark(prop, value['multi'][0], source);
 			aElement.html('<strong title=' + URI + '>' + prop + '</strong>');
 			aElement.css('color', '#777777');
 			var ulElement = $('<ul>');
@@ -249,6 +249,7 @@ function constructSentenceList(array) {
 function constructSentence(sentence) {
 	var value = sentence['value'];
 	var property = sentence['prop'];
+	var source = sentence['source'];
 	var liElement = liElement = $('<li>');
 	if(value != null) {
 		liElement.html('<strong>' + property  + '</strong>：' + roundDouble(value));
@@ -619,7 +620,7 @@ function dropTail(prop, value) {
 	return value;
 }
 
-function dropMark(prop, value) {
+function dropMark(prop, value, source) {
 	if(prop.indexOf('x-') < 0) {
 		return prop;
 	}
@@ -627,15 +628,6 @@ function dropMark(prop, value) {
 	if(reg.test(prop)) {
 		var regg = new RegExp("\\([0-9]*\\)")
 		prop = prop.replace(regg, "");
-		var source;
-		if(value.indexOf('drugbank') >= 0) source = 'drugbank';
-		else if(value.indexOf('pharmgkb') >= 0) source = 'pharmgkb';
-		else if(value.indexOf('omim') >= 0) source = 'omim';
-		else if(value.indexOf('kegg') >= 0) source = 'kegg';
-		else if(value.indexOf('mesh') >= 0) source = 'mesh';
-		else if(value.indexOf('interpro') >= 0) source = 'interpro';
-		else if(value.indexOf('ncbigene') >= 0) source = 'ncbigene';
-		else if(value.indexOf('orphanet') >= 0) source = 'orphanet';
 		prop = "in-link from " + source; 
 	} else {
 		prop = "out-link to " + prop.substring(2, prop.length);

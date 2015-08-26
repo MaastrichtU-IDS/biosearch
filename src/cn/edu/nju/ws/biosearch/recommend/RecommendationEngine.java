@@ -65,6 +65,8 @@ public class RecommendationEngine {
 				}
 			} catch (JenaException e) {
 				continue;
+			} finally {
+				sqe.close();
 			}
 		}
 		return entities;

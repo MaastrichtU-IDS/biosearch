@@ -33,11 +33,20 @@ public class DatasetService {
 		} finally {
 			executor.close();
 		}
-		if(label != null)
-			label = label.replaceAll("\\[\\w+:\\w+\\]", "");
+		if(label != null) {
+			label = shortLabel(label);
+		}
 		return label;
 	}
 	
+	public static String shortLabel(String label) {
+		String shortLabel = label.replaceAll("\\[\\w+:\\w+\\]", "");
+		if(!shortLabel.equals(""))
+			label = shortLabel;
+		
+		return label;
+	}
+
 	public static List<String> getType(String uri, String source) {
 		List<String> type = new ArrayList<String> ();
 		if(source == null)
@@ -92,32 +101,22 @@ public class DatasetService {
 
 	public static String getSource(String uri) {
 		if(uri == null) return null;
-		if(uri.contains("interpro"))
-			return "interpro";
-		else if(uri.contains("pharmgkb"))
-			return "pharmgkb";
-		else if(uri.contains("kegg"))
-			return "kegg";
-		else if(uri.contains("drugbank"))
-			return "drugbank";
-		else if(uri.contains("mesh"))
-			return "mesh";
-		else if(uri.contains("omim"))
-			return "omim";
-		else if(uri.contains("ncbigene"))
-			return "ncbigene";
-		else if(uri.contains("orphanet"))
-			return "orphanet";
-		else
-			return null;
+		Set<String> sourceNames = DataSourceManager.getInstance().listSourceNames();
+		for(String sourceName : sourceNames) {
+			if(uri.contains(sourceName)) {
+				return sourceName;
+			}
+		}
+		
+		return null;
 	}
 	
 	public static void main(String[] args) {
 		
-		List<String> type = getType("http://bio2rdf.org/mesh:D010300", "mesh");
+//		List<String> type = getType("http://bio2rdf.org/mesh:D010300", "mesh");
 //		String label1 = getLabel("http://bio2rdf.org/drugbank_resource:calculated-properties-DB05013-3");
 		//System.out.println(label);
-		System.out.println(type);
+//		System.out.println(type);
 		
 		
 		/*
@@ -130,5 +129,9 @@ public class DatasetService {
 			}
 		}
 		*/
+		
+		String label = "[drugbank_vocabulary:e78186eb12eeaebda8a530a67513beea]";
+		label = DatasetService.shortLabel(label);
+		System.out.println(label);
 	}
 }

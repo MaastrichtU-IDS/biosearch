@@ -70,6 +70,7 @@ public class Instance extends HttpServlet {
 			return;
 		}
 		Model model = executor.execDescribe(instURI);
+		executor.close();
 //		Set<Intel> intels = getIntel();
 		List<String> uList = new ArrayList<String> ();
 		uList.add(instURI);
@@ -173,60 +174,6 @@ public class Instance extends HttpServlet {
 		
 	}
 	
-//	private JSONArray constructInstanceJSON(Model model) {
-//		JSONArray pvArray = new JSONArray();
-//		JSONObject item = new JSONObject();
-//		StmtIterator iter = model.listStatements();
-//		Map<String, JSONArray> composedMap = new HashMap<String, JSONArray> ();
-//		int x_linkin = 0;
-//		while(iter.hasNext()){
-//			Statement stmt = iter.nextStatement();
-//
-//			System.out.println(stmt.toString());
-//			Resource subject = stmt.getSubject();
-//			Property predicate = stmt.getPredicate();
-//			RDFNode object = stmt.getObject();	
-//			String valueField = null;
-//			item = new JSONObject();
-//			
-//			if(object.isLiteral()) {
-//				valueField = object.asLiteral().getLexicalForm();
-//				
-//				item.put("prop", predicate.getLocalName());
-//				item.put("isObject", "false");
-//			}
-//			else if(object.isResource()) {
-//				String uri = object.asResource().getURI();
-//				
-//				if(uri.equals(instURI) && predicate.getLocalName().contains("x-")) { //x-link in
-//					uri = subject.asResource().getURI();
-//					item.put("prop", "is-"+predicate.getLocalName()+"("+x_linkin+")-of");
-//					x_linkin ++;
-//				} else { //normal property
-//					item.put("prop", predicate.getLocalName());
-//				}
-//				
-//				String source = DatasetService.getSource(uri);
-//				if(source == null)
-//					valueField = String.format("<a target='_blank' href ='%s' title='%s'>%s</a>", uri, uri, uri);
-//				else {
-//					String label = DatasetService.getLabel(uri);
-//					if(label == null) continue;
-//					valueField = String.format("<a href ='instance.html?inst=%s' title='%s'>%s</a>", uri, uri, label);
-//				}
-//				
-//				item.put("isObject", "true");
-//			}
-//			
-//			
-//			item.put("URI", predicate.getURI());
-//			item.put("value", valueField);
-//			pvArray.add(item);
-//		}
-//		
-//		return pvArray;
-//	}
-	
 	private String constructLiteralString(Literal literal) {
 		String literalString = null;
 //		if(literal.getDatatypeURI().equals(XSD.date.getURI())) {
@@ -254,7 +201,6 @@ public class Instance extends HttpServlet {
 		while(iter.hasNext()){
 			Statement stmt = iter.nextStatement();
 			
-//			System.out.println("!!"+stmt.toString());
 			Resource subject = stmt.getSubject();
 			Property predicate = stmt.getPredicate();
 			RDFNode object = stmt.getObject();	
@@ -269,10 +215,13 @@ public class Instance extends HttpServlet {
 				if(isIncomingXLink(stmt)) {
 					for(int i = 0; i < valueField.size(); i ++) {
 						JSONObject itemXLINK = new JSONObject();
+						String uri = subject.asResource().getURI();
+						String source = DatasetService.getSource(uri);
 						itemXLINK.put("isObject", true);
 						itemXLINK.put("URI", predicate.getURI());
 						itemXLINK.put("value", valueField.get(i));
 						itemXLINK.put("prop", "is-"+predicate.getLocalName()+"("+i+")-of");
+						itemXLINK.put("source", source);
 						pvArray.add(itemXLINK);
 					}
 					continue;
@@ -284,6 +233,13 @@ public class Instance extends HttpServlet {
 				item.put("isObject", object.isResource());
 				item.put("URI", predicate.getURI());
 				item.put("prop", predicateLN);
+				if(object.isResource()) {
+					String uri = object.asResource().getURI();
+					String source = DatasetService.getSource(uri);
+					item.put("source", source);
+				} else {
+					item.put("source", "");
+				}
 			} else {
 				continue;
 			}

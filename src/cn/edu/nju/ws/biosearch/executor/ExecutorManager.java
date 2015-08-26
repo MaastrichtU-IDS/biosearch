@@ -27,6 +27,7 @@ public class ExecutorManager {
 	public SPARQLQueryExecutor getExecutor(String name) {
 		if(name == null || !executors.containsKey(name))
 			return null;
+		executors.put(name, new VirtuosoSPARQLQueryExecutor(name));
 		return executors.get(name);
 	}
 }

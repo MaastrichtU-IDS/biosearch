@@ -1,5 +1,7 @@
 package cn.edu.nju.ws.biosearch.executor;
 
+import java.util.Set;
+
 import virtuoso.jena.driver.VirtGraph;
 import virtuoso.jena.driver.VirtuosoQueryExecution;
 import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
@@ -60,15 +62,14 @@ public class VirtuosoSPARQLQueryExecutor implements SPARQLQueryExecutor {
 		String queryIn = String.format("select ?s ?p <%s> where {?s ?p <%s>.}", uri, uri);
 		Model model = null;
 		
-		String sources[] = {"drugbank","pharmgkb","omim","kegg","mesh","interpro","ncbigene","orphanet"};
-		for(int i = 0; i < sources.length; i ++) {
-			if(sources[i].equals(source)) continue;
-//			System.out.println(sources[i]);
-			conn = DataSourceManager.getInstance().getVirtGraphBySource(sources[i]);
+		Set<String> sourceNames = DataSourceManager.getInstance().listSourceNames();
+		for(String sourceName : sourceNames) {
+			if(sourceName.equals(source)) continue;
+			conn = DataSourceManager.getInstance().getVirtGraphBySource(sourceName);
 			if(conn == null) {
 				continue;
 			}
-			VirtuosoQueryExecution vqeIn = VirtuosoQueryExecutionFactory.create (queryIn, conn);
+			VirtuosoQueryExecution vqeIn = VirtuosoQueryExecutionFactory.create(queryIn, conn);
 			try {
 				if(model == null) {
 					model = vqeIn.execDescribe();
@@ -79,6 +80,7 @@ public class VirtuosoSPARQLQueryExecutor implements SPARQLQueryExecutor {
 				conn.close();
 			}
 		}
+
 		return model;
 	}
 

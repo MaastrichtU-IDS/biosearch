@@ -422,6 +422,12 @@ public class OntManager {
 			String prop = pv.get("prop").toString();
 			String URI = pv.get("URI").toString();
 			String isObject = pv.get("isObject").toString();
+			String source;
+			if(pv.get("source") == null) {
+				source = "";
+			} else {
+				source = pv.get("source").toString();
+			}
 			Object value = pv.get("value");
 			JSONObject valueJSON = new JSONObject();
 			if(value instanceof JSONArray) {
@@ -431,7 +437,7 @@ public class OntManager {
 				valueJSON.put("single", value);
 			}
 //			String propLabel = getLabel(prop);
-			propTreeMap.put(prop, new PropertyTree(prop, URI, valueJSON, isObject));
+			propTreeMap.put(prop, new PropertyTree(prop, URI, valueJSON, isObject, source));
 			props.add(prop);
 		}
 		
@@ -446,7 +452,7 @@ public class OntManager {
 				}
 				else {
 					String superPropLabel = getLabel(superProp);
-					tree = new PropertyTree(superPropLabel, "", "");
+					tree = new PropertyTree(superPropLabel, "", "", "");
 					props.add(superProp);
 				}
 				tree.addSubTree(subTree);
@@ -455,7 +461,7 @@ public class OntManager {
 			}
 		}
 		
-		PropertyTree tree = new PropertyTree("Property", "", "");
+		PropertyTree tree = new PropertyTree("Property", "", "", "");
 		for(PropertyTree subTree : propTreeMap.values()) {
 			tree.addSubTree(subTree);
 		}

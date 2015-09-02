@@ -18,8 +18,6 @@ function initSearchInput() {
 	$('#searchInput').autocomplete({
 		source: 'listClassesAndProperties'		
 	});
-	
-
 }
 
 function initSearchButton() {
@@ -57,19 +55,6 @@ function tagStyleSetter(item) {
 	}
 	if(item.indexOf('p:') === 0 || item.indexOf('P:') === 0) {
 		$('.text-button:last').css('background-color','#d14');
-		if(isEmptyValueFilter(item)) {
-			showPopover($('.text-tag:last'), 'value', true);
-		}
-		else if(isValueFilter(item)) {
-			showPopover($('.text-tag:last'), 'value', false);
-		}
-		else if(isEmptyRangeFilter(item)) {
-			showPopover($('.text-tag:last'), 'range', true);
-		}
-		else if(isRangeFilter(item)) {
-			showPopover($('.text-tag:last'), 'range', false);
-		}
-		
 	}
 	else if (item.indexOf('c:') === 0 || item.indexOf('C:') === 0) {
 		$('.text-button:last').css('background-color','#1d4');
@@ -128,7 +113,6 @@ function searchBtnHandler() {
 	var queryString = $('.text-core input').val();
 	if(queryString != '[]') {		
 		var encodedQuery = encodeURIComponent(queryString);
-		//var encodedQuery = queryString;
 		if($('#advancedBtn').hasClass('turnOn')) {
 			location.href = searchPrefix + encodedQuery + "&bool=true";
 		}
@@ -154,53 +138,6 @@ function addTagToSearchInput(text) {
 
 function updateFromCache() {
 	$('#searchInput').textext()[0].tags().updateFromCache();
-}
-
-function showPopover(element, type, show) {
-	
-	var valueTitle = '请输入值';
-	var valueContent = '<div class="row-fluid form-inline">' +
-						'<input type="text" class="span8 valueInput" placeholder="value">' +
-						'<label>&nbsp;米</label>' +
-						'<div style="display:inline-block;">' +
-							'<button class="popBtn popOkBtn" data-tag-index="'+g_tagIndex+'" type="button"><i class="icon-ok"></i></button>' +
-							'<button class="popBtn popCancelBtn" type="button"><i class="icon-remove"></i></button>' +
-						'</div>' +
-					'</div>';
-	var rangeTitle = '请输入范围';
-	var rangeContent = '<div class="row-fluid form-inline">' +
-						'<input type="text" class="span4 rangeInput rangeMin" placeholder="min">' +
-						'<label>-</label>' +
-						'<input type="text" class="span4 rangeInput rangeMax" placeholder="max">' +
-						'<label>&nbsp;米</label>' +
-						'<div style="display:inline-block;">' +
-							'<button class="popBtn popOkBtn" data-tag-index="'+g_tagIndex+'" type="button"><i class="icon-ok"></i></button>' +
-							'<button class="popBtn popCancelBtn" type="button"><i class="icon-remove"></i></button>' +
-						'</div>' +
-					'</div>';				
-	var option = {};
-	
-	option['placement'] = 'top';
-	
-	if(type === 'value') {
-		option['title'] = valueTitle;
-		option['content'] = valueContent;
-	}
-	else if(type === 'range') {
-		option['title'] = rangeTitle;
-		option['content'] = rangeContent;
-	}
-	element.attr('rel', 'popover');
-	element.attr('data-tag-index', g_tagIndex++);
-	element.popover(option);
-	
-	
-	if(show) {
-		element.popover('show');
-	}
-	else {
-		element.popover('hide');
-	}
 }
 
 function changeValueTag(tag, value) {

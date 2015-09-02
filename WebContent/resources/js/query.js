@@ -623,7 +623,6 @@ function constructSourceFilter(sourceList) {
 		var inputElement = $('<input>', {
 			type: 'checkbox',
 			id: 'checkbox',
-			// checked: 'checked',
 			value: val['source'],
 		});
 		if(val['count'] == 0) {
@@ -632,12 +631,18 @@ function constructSourceFilter(sourceList) {
 		else {
 			inputElement.attr('checked', 'checked');
 		}
-		inputElement.click(filterBySource);
 		labelElement.append(inputElement);
 		labelElement.append(val['source'] + " (" + val['count'] + ")");
 		//labelElement.append(val['source']);
 		sourceFilterPane.append(labelElement);
 	});
+	var btnElement = $('<button>', {
+		class: 'btn-sm btn-primary'
+	});
+	btnElement.append($('<span>').html('filter by datasets'));
+	btnElement.css({"margin-left":"20px"});
+	btnElement.click(filterBySource);
+	sourceFilterPane.append(btnElement);
 }
 
 function check() {

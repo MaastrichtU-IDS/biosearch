@@ -313,16 +313,6 @@ span.jPag-snext-img {
 	margin-bottom: 10px;
 }
 
-/*
-.parent a {
-	color: #333;
-}
-
-.child a {
-	color: #08C;
-}
-*/
-
 .traceRel {
 	position: relative;
 	top: 3px;
@@ -346,4 +336,9 @@ span.jPag-snext-img {
 .aExpande {
 	margin-left: -20px;
 	padding-left: 20px;
+}
+
+.classLiElement {
+	background-color: #1d4;
+	color: #fff;
 }

@@ -1,7 +1,5 @@
 ﻿$(document).ready(init);
-var searchPrefix = 'query.html?q=';
 var segmentServiceURL = '/Semantic-Annotation/SegmentService';
-var describeURL = 'InitDescribe';
 function init() {			
 	 initSearchPane();
 	 initSampleQueries();
@@ -24,31 +22,14 @@ function initSegmentService() {
 		data: {raw: 'test'},
 		statusCode: {
 			200: function callback(resp) {				
-				// enableSearchBtn();
-				initDescribe();
+				enableSearchBtn();
 			}
 		}
 	});
 }
 
-function initDescribe() {
-		enableSearchBtn();
-		/*
-		$.ajax({
-		url: describeURL,
-		type:'get',
-		statusCode: {
-			200: function callback(resp) {				
-				enableSearchBtn();
-			}
-		}
-	});	
-*/
-}
-
 function disableSearchBtn() {
 	$('#searchBtn').button('loading');
-
 }
 
 function enableSearchBtn() {

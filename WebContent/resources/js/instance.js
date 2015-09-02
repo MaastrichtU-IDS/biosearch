@@ -10,19 +10,7 @@ var searchPrefix = 'query.html?q=';
 function initPage() {
 	initSearchPane();
 	requestByParam();	
-	// initViewOptions();	
 	$('#menu2').menuTree();
-}
-
-function initViewOptions() {
-	$('#viewOption code').bind('click', function() {
-		if($(this).attr('class') == 'selected') {
-			$(this).removeClass();
-		}
-		else {
-			$(this).addClass('selected');
-		}
-	});
 }
 
 function requestByParam() {
@@ -44,7 +32,6 @@ function getParam(paramName) {
 
 function requestForInstance(uri) {
 	$.getJSON('instance', {instURI: uri}, function callback(json) {
-//		console.log(json);
 		parseResult(json);
 	});
 }
@@ -53,7 +40,7 @@ function parseResult(json) {
 	if(!json['label'])
 		window.location.href = uri;
 	var sentenceArray = json['pvarray'];
-	//label = json['result'][0]['label'];
+
 	label = json['label'];
 	type = json['typeLabel'];
 	img = json['img'];
@@ -61,7 +48,6 @@ function parseResult(json) {
 	console.log(json);
 	constructRecommendList(json['recommend']);
 	constructCoreferenceList(json['coreference']);
-	//constructIntelList(json['intel'], json['intel2']);
 	constructReferenceList(json['reference']);
 	getTraceFromCookie();
 	setTraceToCookie();
@@ -84,7 +70,6 @@ function constructInstanceImage() {
 	var curInstance = uri.substring(uri.indexOf('nju28/') + 6);
 	var instanceType = curInstance.split('/')[0];
 	var instanceId = curInstance.split('/')[1].split('=')[1];
-	//var instanceImgURL = prefix + instanceType + '_' + instanceId + '.jpg';
 	var instanceImgURL = img;
 	var imgExisted = false;
 	var imgElement = imgElement = $('<img>', {
@@ -112,14 +97,12 @@ function constructSentenceTree(tree) {
 	if(tree['property'] == 'Property' && tree['subtree']) {
 		$.each(tree['subtree'], function(index, val) {
 			var subtreeLiElement = constructTreeNode(val);
-			liAppend(subtreeLiElement, tree['subtree'][index]['URI'], tree['subtree'][index]['isObject'], tree['subtree'][index]['property']);
-//			console.log(tree['subtree'][index]['namespace'])
-//			ulElement.append(subtreeLiElement);
+			appendPropertyGroup(subtreeLiElement, tree['subtree'][index]['URI'], tree['subtree'][index]['isObject'], tree['subtree'][index]['property']);
 		});
 	}
 }
 
-function liAppend(subtreeLiElement, ns, isObject, prop) {
+function appendPropertyGroup(subtreeLiElement, ns, isObject, prop) {
 	if(ns.indexOf('http://bio2rdf.org/') >= 0 && ns.indexOf('x-') >= 0) {
 		if(prop.indexOf('is-x-') >= 0) {
 			$('#GXIP').append(subtreeLiElement);
@@ -169,7 +152,7 @@ function liAppend(subtreeLiElement, ns, isObject, prop) {
 }
 
 function constructTreeNode(treeNode) {
-	var liElement = parseValue(treeNode['URI'], treeNode['property'], treeNode['value'], treeNode['source']);
+	var liElement = parseValue(treeNode);
 	if(treeNode['subtree']) {
 		var subtreeUlElement = $('<ul>');
 		$.each(treeNode['subtree'], function(index, val) {
@@ -182,15 +165,23 @@ function constructTreeNode(treeNode) {
 	return liElement;
 }
 
-function parseValue(URI, prop, value, source) {
+function parseValue(treeNode) {
+	var URI = treeNode['URI'];
+	var isObject = treeNode['isObject'];
+	var prop = treeNode['property'];
+	var value = treeNode['value'];
+	var source = treeNode['source'];
+	
 	var valueHTML = $('<li>');
 	valueHTML.css('list-style-type', 'none');
+	
 	if(value) {
 		if(value['single']) {
 			value['single']= dropTail(prop, value['single']);
 			prop = dropMark(prop, value['single'], source);
-//			valueHTML.append($('<span>').html('<a href=' + URI + '><strong>' + prop  + '</strong></a>：' + value['single']));
 			valueHTML.append($('<span>').html('<strong title=' + URI + '>' + prop  + '</strong>：' + value['single']));
+			appendOutOfDatasetsImg(valueHTML, value['single'], isObject);
+
 			valueHTML.addClass('child');
 		}
 		else if(value['multi']) {
@@ -205,21 +196,18 @@ function parseValue(URI, prop, value, source) {
 				if(index == 0) return true;
 				var liElement = $('<li>').addClass('child');
 				liElement.css('list-style-type', 'none');
-//				var anchor = $('<a>', {
-//					href:instancePrefix + value['uri'],
-//				});
-//				anchor.html(value['label']);
 				value = dropTail(prop, value);
-//				anchor.bind('click', function () {
-//					setTraceRelation('装备了');
-//				});
-//				liElement.html(anchor);
 				liElement.append($('<span>').html(value));
+				appendOutOfDatasetsImg(liElement, value, isObject);
+
 				ulElement.append(liElement);
 			});
 			ulElement.css('display', 'none');
 			valueHTML.append(aElement);
-			valueHTML.append($('<span>').html('：' + dropTail(prop, value['multi'][0]) + ' ...'));
+			valueHTML.append($('<span>').html('：' + dropTail(prop, value['multi'][0])));
+			appendOutOfDatasetsImg(valueHTML, value['multi'][0], isObject);
+			valueHTML.append($('<span>').html(' ...'));
+
 			valueHTML.append(ulElement);
 			valueHTML.addClass('parent collapsed');
 		}			
@@ -231,58 +219,17 @@ function parseValue(URI, prop, value, source) {
 	return valueHTML;
 }
 
-function constructSentenceList(array) {
-	var ulElement = $('<ul>', {
-						class: 'col-md-6'
-						});
-	ulElement.append($('<h2>'+label+'</h2>'));
-	ulElement.append($('<span>',{
-		text: type,
-		class: 'instType typeSpan'
-	}));
-	for(var i = 0; i < array.length; i++) {
-		constructSentence(array[i]).appendTo(ulElement);
-	}
-	return ulElement;
-}
-
-function constructSentence(sentence) {
-	var value = sentence['value'];
-	var property = sentence['prop'];
-	var source = sentence['source'];
-	var liElement = liElement = $('<li>');
-	if(value != null) {
-		liElement.html('<strong>' + property  + '</strong>：' + roundDouble(value));
-	}
-	else {
-		var values = sentence['values'];
-		liElement.html(property + '：');
-		var ulElement = $('<ul>');
-		$.each(values, function(index, value) {
-			var uri = value.split('\t')[0];
-			var label = value.split('\t')[1];
-			var count = value.split('\t')[2];
-			var insideLi = $('<li>');
-			var aElement = $('<a>', {
-							href: instancePrefix + uri,
-							text: label
-							});
-			insideLi.append(aElement);
-			insideLi.append('（' + count + '）');
-			ulElement.append(insideLi);
+function appendOutOfDatasetsImg(liElement, value, isObject) {
+	if(value.indexOf('instance.html?inst=') < 0 && isObject == 'true') {
+		var imgElement = $('<img>', {
+			src: 'resources/img/outlink.png',
+			width: '8',
+			height: '8'
 		});
-		liElement.append(ulElement);
-	}
-	
-	return liElement;
-}
 
-function roundDouble(num) {
-	var rounded = '' + num;
-	if(rounded.split('.').length == 2) {
-		rounded = rounded.split('.')[0] + '.' + rounded.split('.')[1].substring(0,3);
+		liElement.append($('<span>').html(' '));
+		liElement.append(imgElement);
 	}
-	return rounded;
 }
 
 function constructReferenceList(refList) {
@@ -478,10 +425,6 @@ function constructBreadcrumb() {
 				relSpanElement.addClass('traceRel');
 				liElement.append(relSpanElement);
 			}
-			/*
-			var spanElement = $('<span class="divider">></span>');
-			liElement.append(spanElement);
-			*/
 		}
 		ulElement.append(liElement);
 	});

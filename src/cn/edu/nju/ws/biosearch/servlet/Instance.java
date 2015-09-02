@@ -204,10 +204,15 @@ public class Instance extends HttpServlet {
 			Resource subject = stmt.getSubject();
 			Property predicate = stmt.getPredicate();
 			RDFNode object = stmt.getObject();	
-			JSONObject item = new JSONObject();
-			
 			String predicateLN = predicate.getLocalName();
 			String predicateURI = predicate.getURI();
+
+			if(isConvertLink(stmt)) {
+				predicateLN = "is " + predicateLN +" of";
+			}
+			JSONObject item = new JSONObject();
+			
+			
 			if(pvHashMap.containsKey(predicateURI)) {
 				ArrayList<String> valueField = pvHashMap.get(predicateURI);
 				pvHashMap.remove(predicateURI);
@@ -256,12 +261,9 @@ public class Instance extends HttpServlet {
 			Statement stmt = iter.nextStatement();
 
 //			System.out.println(stmt.toString());
-			Resource subject = stmt.getSubject();
 			Property predicate = stmt.getPredicate();
-			RDFNode object = stmt.getObject();
 			
 			String predicateURI = null;
-			String uri = null;
 			JSONArray valueField;
 			String value = getValue(stmt);
 			
@@ -290,6 +292,17 @@ public class Instance extends HttpServlet {
 		return pvHashMap;
 	}
 	
+	private boolean isConvertLink(Statement stmt) {
+		RDFNode object = stmt.getObject();
+		if(!object.isResource()) return false;
+		String uri = object.asResource().getURI();
+		if(uri.equals(instURI)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	private boolean isIncomingXLink(Statement stmt) {
 		Property predicate = stmt.getPredicate();
 		RDFNode object = stmt.getObject();
@@ -307,6 +320,11 @@ public class Instance extends HttpServlet {
 		Resource subject = stmt.getSubject();
 		RDFNode object = stmt.getObject();
 		
+		if(isConvertLink(stmt) && !isIncomingXLink(stmt)) {
+			subject = stmt.getObject().asResource();
+			object = stmt.getSubject();
+		}
+
 		String value = null;
 		if(object.isLiteral()) {
 			value = object.asLiteral().getLexicalForm();

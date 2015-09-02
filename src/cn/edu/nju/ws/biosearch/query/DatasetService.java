@@ -103,7 +103,7 @@ public class DatasetService {
 		if(uri == null) return null;
 		Set<String> sourceNames = DataSourceManager.getInstance().listSourceNames();
 		for(String sourceName : sourceNames) {
-			if(uri.contains(sourceName)) {
+			if(uri.toLowerCase().contains(sourceName.toLowerCase())) {
 				return sourceName;
 			}
 		}
@@ -130,8 +130,8 @@ public class DatasetService {
 		}
 		*/
 		
-		String label = "[drugbank_vocabulary:e78186eb12eeaebda8a530a67513beea]";
-		label = DatasetService.shortLabel(label);
-		System.out.println(label);
+//		String label = "[drugbank_vocabulary:e78186eb12eeaebda8a530a67513beea]";
+//		label = DatasetService.shortLabel(label);
+//		System.out.println(label);
 	}
 }

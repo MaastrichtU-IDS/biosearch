@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -44,6 +45,8 @@ public class Search extends HttpServlet {
 	private List<ResultItem> resultList;
 	private OntManager om;
 	private QueryEngine qe;
+	
+	private Logger logger = Logger.getLogger(this.getClass().getName());
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -148,6 +151,8 @@ public class Search extends HttpServlet {
 		if(requestItem.startsWith("c:") || requestItem.startsWith("C:")) {
 			String classLabel = requestItem.substring(2);
 			String classURI = om.getClassURI(classLabel);
+			logger.info(classLabel+" "+classURI+"\n");
+			
 			if(classURI != null)
 				reqClassList.add(classURI);
 		}

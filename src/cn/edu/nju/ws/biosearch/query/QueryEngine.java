@@ -9,6 +9,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.jena.atlas.logging.Log;
+import org.apache.log4j.Layout;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+
 import cn.edu.nju.ws.biosearch.datasource.DataSourceManager;
 import cn.edu.nju.ws.biosearch.executor.ExecutorManager;
 import cn.edu.nju.ws.biosearch.executor.SPARQLQueryExecutor;
@@ -19,6 +24,9 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 
 public class QueryEngine {
 	private Map<String, Integer> resultCount;
+	
+	private Logger logger = Logger.getLogger(this.getClass().getName());
+
 	public QueryEngine() {
 		resultCount = new HashMap<String, Integer>();
 	}
@@ -34,7 +42,9 @@ public class QueryEngine {
 		for(String source : sources) {
 			SPARQLQueryExecutor executor = ExecutorManager.getInstance().getExecutor(source);
 			String queryString = QueryConstructor.constructQuery(keywords, classes, properties, source);
-//			System.out.printf("%s\t%s\n", source, queryString);
+
+			logger.info(source+"\t"+queryString+"\n");
+
 			if(executor == null) continue;
 			ResultSet rs = executor.execSelect(queryString);
 			if(rs == null) continue;
@@ -91,7 +101,7 @@ public class QueryEngine {
 			}
 			if(count != 0) {
 				resultCount.put(source, count);
-				System.out.printf("[%s: %s]\t", source, count);
+				logger.info("["+source+": "+count+"]\n");
 			}
 		}
 		System.out.println();

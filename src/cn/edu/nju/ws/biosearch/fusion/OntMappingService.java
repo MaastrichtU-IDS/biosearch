@@ -12,7 +12,7 @@ import cn.edu.nju.ws.biosearch.datasource.DataSourceManager;
 
 
 public class OntMappingService {
-	private Map<String, Map<String, ArrayList<String>>> mappings;
+	private Map<String, Map<String, HashSet<String>>> mappings;
 	private Set<String> mapped;
 	private static OntMappingService inst = null;
 	
@@ -23,7 +23,7 @@ public class OntMappingService {
 	}
 
 	private OntMappingService() {
-		this.mappings = new HashMap<String, Map<String, ArrayList<String>>> ();
+		this.mappings = new HashMap<String, Map<String, HashSet<String>>> ();
 		this.mapped = new HashSet<String> ();
 		Set<String> sources = DataSourceManager.getInstance().listSourceNames();
 		for(String source : sources) {
@@ -40,7 +40,7 @@ public class OntMappingService {
 		if(input == null)
 			return;
 		Scanner scanner = null;
-		Map<String, ArrayList<String>> mapping = new HashMap<String, ArrayList<String>> ();
+		Map<String, HashSet<String>> mapping = new HashMap<String, HashSet<String>> ();
 		try {
 			scanner = new Scanner(input);
 			while(scanner.hasNext()) {
@@ -48,10 +48,10 @@ public class OntMappingService {
 				String[] splitted = line.split(" ");
 				if(splitted.length == 2) {
 					if(mapping.containsKey(splitted[1])) {
-						ArrayList<String> classes = mapping.get(splitted[1]);
+						HashSet<String> classes = mapping.get(splitted[1]);
 						classes.add(splitted[0]);
 					} else {
-						ArrayList<String> classes = new ArrayList<String>();
+						HashSet<String> classes = new HashSet<String>();
 						classes.add(splitted[0]);
 						mapping.put(splitted[1], classes);
 					}
@@ -65,10 +65,10 @@ public class OntMappingService {
 		mappings.put(source, mapping);
 	}
 	
-	public static ArrayList<String> getMapping(String uri, String source) {
-		Map<String, ArrayList<String>> mapping = getInstance().mappings.get(source);
+	public static HashSet<String> getMapping(String uri, String source) {
+		Map<String, HashSet<String>> mapping = getInstance().mappings.get(source);
 		if(mapping == null) 
-			return null;
+			return new HashSet<String>();
 		return mapping.get(uri);
 	}
 	

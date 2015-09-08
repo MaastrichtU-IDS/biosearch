@@ -637,7 +637,7 @@ function constructSourceFilter(sourceList) {
 		sourceFilterPane.append(labelElement);
 	});
 	var btnElement = $('<button>', {
-		class: 'btn-sm btn-primary'
+		class: 'btn-sm btn-warning'
 	});
 	btnElement.append($('<span>').html('filter by datasets'));
 	btnElement.css({"margin-left":"20px"});
@@ -671,7 +671,13 @@ function constructClassTreeNode(treeNode) {
 		href: filterByClass(className)
 	});
 	//aElement.bind('click', filterByClass);
-	liElement.append(aElement);
+	
+	if(className.indexOf('others') < 0)
+		liElement.append(aElement);
+	else liElement.append($('<span>').html(className));
+	if(className.charAt(className.length) != ' ') {
+		liElement.append(' ')
+	}
 	liElement.append('(' + treeNode['count'] + ')');
 	if(treeNode['subTree']) {
 		var ulElement = $('<ul>');

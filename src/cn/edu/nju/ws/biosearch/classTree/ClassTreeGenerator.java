@@ -4,9 +4,12 @@ package cn.edu.nju.ws.biosearch.classTree;
  * 
  */
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import cn.edu.nju.ws.biosearch.fusion.OntMappingService;
 import cn.edu.nju.ws.biosearch.ontology.OntManager;
 import cn.edu.nju.ws.biosearch.query.DatasetService;
 
@@ -19,6 +22,8 @@ import com.hp.hpl.jena.ontology.OntClass;
 public class ClassTreeGenerator {
 	
 	private Map<String, Integer> classMap;
+	private HashSet<String> othersClasses;
+	private OntManager om = OntManager.getInstance();
 	
 	
 	public ClassTreeGenerator(Map<String, Integer> classList) {
@@ -26,8 +31,80 @@ public class ClassTreeGenerator {
 	}
 	
 	public ClassTree getClassTree() {
-		ClassTree classTree = new ClassTree();
+		othersClasses = new HashSet<String>();
 		for(String uri : classMap.keySet()) {
+			othersClasses.add(uri);
+		}
+
+		ClassTree classTree = new ClassTree();
+		ArrayList<String> classGroups = ClassGroup.getInstance().getClassGroups();
+		if(classGroups.size() <= 0) {
+			return getOthersClassTree();
+		}
+
+		for(String classGroup : classGroups) {
+			String label = classGroup;
+			String sioUri = om.getClassURI(label);
+			ClassTree subTree = getSubClassTree(sioUri);
+			if(subTree.getNodes().size() > 0) {
+				TreeNode node = new TreeNode(label, sioUri, subTree);
+				classTree.addNode(node);
+			}
+		}
+		
+		String label = "others";
+		String sioUri = "others";
+		ClassTree subTree = getOthersClassTree();
+		if(subTree.getNodes().size() > 0) {
+			TreeNode node = new TreeNode(label, sioUri, subTree);
+			classTree.addNode(node);
+		}
+		
+		return classTree;
+	}
+
+	private ClassTree getSubClassTree(String sioUri) {
+		ClassTree classTree = new ClassTree();
+		HashSet<String> groupedClasses = new HashSet<String>();
+
+		for(String uri : othersClasses) {
+			int count = getClassCount(uri);
+			if(count > 0) {
+				String namespace = DatasetService.getSource(uri);
+				HashSet<String> uris = OntMappingService.getMapping(sioUri, namespace);
+				if(uris == null) {
+					continue;
+				}
+				if(uris.contains(uri)) {
+					String label = DatasetService.getLabel(uri);
+					if(label == null || namespace == null || label.trim().equals(""))
+						continue;
+					label = label.replaceAll("\\[\\w+:.+\\]", "");
+					String lowCaseLabel = label;
+					if(lowCaseLabel.toLowerCase().startsWith(namespace.toLowerCase())) {
+						label = label.substring(namespace.length()+1);
+					}
+					label = namespace + " " + label;
+					OntManager.getInstance().registerClassLabel(label, uri);
+					TreeNode node = new TreeNode(label, count, uri);
+					classTree.addNode(node);
+					
+					groupedClasses.add(uri);
+				}
+			}
+		}
+		
+		for(String uri : groupedClasses) {
+			othersClasses.remove(uri);
+		}
+
+		classTree.sortNodes();
+		return classTree;
+	}
+	
+	private ClassTree getOthersClassTree() {
+		ClassTree classTree = new ClassTree();
+		for(String uri : othersClasses) {
 			int count = getClassCount(uri);
 			if(count > 0) {
 				String namespace = DatasetService.getSource(uri);
@@ -45,7 +122,7 @@ public class ClassTreeGenerator {
 				classTree.addNode(node);
 			}
 		}
-
+		
 		classTree.sortNodes();
 		return classTree;
 	}

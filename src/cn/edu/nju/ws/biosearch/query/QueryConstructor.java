@@ -3,6 +3,7 @@ package cn.edu.nju.ws.biosearch.query;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -80,7 +81,7 @@ public class QueryConstructor {
 			return triplePatterns;
 		}
 		for(String property : properties) {
-			ArrayList<String> localPropertys = OntMappingService.getMapping(property, source);
+			HashSet<String> localPropertys = OntMappingService.getMapping(property, source);
 			if (localPropertys == null) {
 				String localProperty = property;
 				triplePatterns.add(String.format("?s ?pc ?o. BIND(<%s> as ?pc).", localProperty));
@@ -100,7 +101,7 @@ public class QueryConstructor {
 			return triplePatterns;
 		}
 		for(String clazz : classes) {
-			ArrayList<String> localClasses = OntMappingService.getMapping(clazz, source);
+			HashSet<String> localClasses = OntMappingService.getMapping(clazz, source);
 			if(localClasses == null) {
 				String localClass = clazz;
 				triplePatterns.add(String.format("?s a <%s>.", localClass));

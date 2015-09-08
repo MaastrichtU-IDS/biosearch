@@ -60,7 +60,7 @@ function tagStyleSetter(item) {
 		$('.text-button:last').css('background-color','#1d4');
 	}
 	else if (item.indexOf('s:') === 0 || item.indexOf('S:') === 0) {
-		$('.text-button:last').css('background-color','#a1d');
+		$('.text-button:last').css('background-color','#9b479f');
 	}
 	else {
 		$('.text-button:last').css('background-color','#1ad');		

@@ -4,6 +4,8 @@ package cn.edu.nju.ws.biosearch.classTree;
  * 
  */
 
+import java.util.List;
+
 import org.json.simple.JSONObject;
 
 /**
@@ -33,11 +35,15 @@ public class TreeNode implements Comparable<TreeNode>{
 	 * @param uri
 	 * @param subTree
 	 */
-	public TreeNode(String label, int count, String uri, ClassTree subTree) {
+	public TreeNode(String label,  String uri, ClassTree subTree) {
 		this.label = label;
-		this.count = count;
 		this.uri = uri;
 		this.subTree = subTree;
+		
+		List<TreeNode> nodes = subTree.getNodes();
+		for(TreeNode node : nodes) {
+			count += node.getCount();
+		}
 	}
 	
 	/**

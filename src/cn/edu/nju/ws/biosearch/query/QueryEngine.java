@@ -104,7 +104,6 @@ public class QueryEngine {
 				logger.info("["+source+": "+count+"]\n");
 			}
 		}
-		System.out.println();
 
 		Collections.sort(results, new ResultItem.ResultItemComparator());
 

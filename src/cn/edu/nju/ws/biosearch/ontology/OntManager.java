@@ -7,7 +7,6 @@ package cn.edu.nju.ws.biosearch.ontology;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -55,7 +54,8 @@ public class OntManager {
 	private Set<String> classURIs;
 	private Map<String, OntProperty> propMap;
 	private List<OntProperty> propListed;
-	public static OntManager getInstance() {
+	
+	public static synchronized OntManager getInstance() {
 		if(instance == null) {
 			instance = new OntManager();
 		}
@@ -164,7 +164,7 @@ public class OntManager {
 		if(cls == null) {
 			OntClass ontCls = model.createClass(classURI);
 			classMap.put(classLabel, ontCls);
-		}
+		} 
 	}
 	
 	public String getPropURI(String propLabel) {
@@ -468,7 +468,6 @@ public class OntManager {
 		tree.sort();
 		return tree;
 	}
-	
 	
 	public static void main(String[] args) {
 		Config conf = new Config();

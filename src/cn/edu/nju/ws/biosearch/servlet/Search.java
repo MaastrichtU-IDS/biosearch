@@ -151,7 +151,7 @@ public class Search extends HttpServlet {
 		if(requestItem.startsWith("c:") || requestItem.startsWith("C:")) {
 			String classLabel = requestItem.substring(2);
 			String classURI = om.getClassURI(classLabel);
-			logger.info(classLabel+" "+classURI+"\n");
+			logger.info(classLabel+" "+classURI);
 			
 			if(classURI != null)
 				reqClassList.add(classURI);

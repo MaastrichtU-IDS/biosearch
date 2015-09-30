@@ -59,7 +59,7 @@ public class ClassTreeGenerator {
 			TreeNode node = new TreeNode(label, sioUri, subTree);
 			classTree.addNode(node);
 		}
-		
+
 		return classTree;
 	}
 
@@ -85,7 +85,7 @@ public class ClassTreeGenerator {
 						label = label.substring(namespace.length()+1);
 					}
 					label = namespace + " " + label;
-					OntManager.getInstance().registerClassLabel(label, uri);
+					om.registerClassLabel(label, uri);
 					TreeNode node = new TreeNode(label, count, uri);
 					classTree.addNode(node);
 					
@@ -117,7 +117,7 @@ public class ClassTreeGenerator {
 					label = label.substring(namespace.length()+1);
 				}
 				label = namespace + " " + label;
-				OntManager.getInstance().registerClassLabel(label, uri);
+				om.registerClassLabel(label, uri);
 				TreeNode node = new TreeNode(label, count, uri);
 				classTree.addNode(node);
 			}
@@ -134,7 +134,7 @@ public class ClassTreeGenerator {
 	
 	public ClassTree constructSubTree(OntClass cls) {
 		ClassTree classTree = null;
-		List<OntClass> clsList = OntManager.getInstance().listSubClasses(cls);
+		List<OntClass> clsList = om.listSubClasses(cls);
 		if(clsList.size() != 0) {
 			classTree = new ClassTree();
 			for(OntClass subCls : clsList) {

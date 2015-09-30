@@ -37,10 +37,12 @@ public class OntMappingService {
 	
 	public void readMappingFromFile(String source) {
 		InputStream input = OntMappingService.class.getClassLoader().getResourceAsStream("mappings/" + source);
-		if(input == null)
-			return;
-		Scanner scanner = null;
 		Map<String, HashSet<String>> mapping = new HashMap<String, HashSet<String>> ();
+		if(input == null) {
+			mappings.put(source, mapping);
+			return;
+		}
+		Scanner scanner = null;
 		try {
 			scanner = new Scanner(input);
 			while(scanner.hasNext()) {

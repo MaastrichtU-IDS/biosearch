@@ -43,7 +43,7 @@ public class QueryEngine {
 			SPARQLQueryExecutor executor = ExecutorManager.getInstance().getExecutor(source);
 			String queryString = QueryConstructor.constructQuery(keywords, classes, properties, source);
 
-			logger.info(source+"\t"+queryString+"\n");
+			logger.info(source+"\t"+queryString);
 
 			if(executor == null) continue;
 			ResultSet rs = executor.execSelect(queryString);
@@ -101,7 +101,7 @@ public class QueryEngine {
 			}
 			if(count != 0) {
 				resultCount.put(source, count);
-				logger.info("["+source+": "+count+"]\n");
+				logger.info("["+source+": "+count+"]");
 			}
 		}
 

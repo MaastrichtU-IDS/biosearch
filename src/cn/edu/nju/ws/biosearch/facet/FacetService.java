@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
-
 import cn.edu.nju.ws.biosearch.query.ResultItem;
 
 public class FacetService {

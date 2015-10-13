@@ -111,27 +111,4 @@ public class DatasetService {
 		return null;
 	}
 	
-	public static void main(String[] args) {
-		
-//		List<String> type = getType("http://bio2rdf.org/mesh:D010300", "mesh");
-//		String label1 = getLabel("http://bio2rdf.org/drugbank_resource:calculated-properties-DB05013-3");
-		//System.out.println(label);
-//		System.out.println(type);
-		
-		
-		/*
-		Set<String> sources = DataSourceManager.getInstance().listSourceNames();
-		for(String source : sources) {
-			Map<String, String> props = getProperties(source);
-			System.out.println(source);
-			for(String key : props.keySet()) {
-				System.out.println("\t\t" + key + ":" + props.get(key));
-			}
-		}
-		*/
-		
-//		String label = "[drugbank_vocabulary:e78186eb12eeaebda8a530a67513beea]";
-//		label = DatasetService.shortLabel(label);
-//		System.out.println(label);
-	}
 }

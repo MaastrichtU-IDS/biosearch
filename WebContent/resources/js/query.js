@@ -29,7 +29,6 @@ function requestByParam() {
 
 function setSearchInput(query) {
 	var list = $.parseJSON(decodeURIComponent(query));
-	// var list = $.parseJSON(query);
 	$.each(list, function(index, value) {
 		addTagToSearchInput(value);
 	});
@@ -73,14 +72,6 @@ function resetFilter() {
 
 function submitFilter() {
 	filterByProperty();
-	// var reqJSON = getFilterRequestJSON();
-	// var filterStr = '{"filterArray":[{"type":"Int","property":"http://ws.nju.edu.cn/nju28/jp/ss","min":"80","max":"80000"}]}';
-	// console.log($.parseJSON(reqJSON));
-	// reqJSON = encodeURIComponent(reqJSON);
-	// $.getJSON('facetFilter', {filter: reqJSON}, function callback(response) {
-		// console.log(response);
-		// filterResult(response);
-	// });
 }
 
 function filterResult(filtered) {
@@ -178,7 +169,6 @@ function submitQuery(query, isBool) {
 function filterByProperty() {
 	var properyName = this.text;
 	var keywords = $.parseJSON(decodeURIComponent(query));
-	// var keywords = $.parseJSON(query);
 	//remove all the class filters
 	for(var i = keywords.length - 1; i >= 0; i--)  {
 		var value = keywords[i];
@@ -207,7 +197,6 @@ function filterByProperty() {
 
 function filterBySource() {
 	var keywords = $.parseJSON(decodeURIComponent(query));
-	// var keywords = $.parseJSON(query);
 	//remove all the class filters
 	for(var i = keywords.length - 1; i >= 0; i--)  {
 		var value = keywords[i];
@@ -236,7 +225,6 @@ function arrayToJSON(array) {
 
 function setResultInfo() {
 	var keywords = $.parseJSON(decodeURIComponent(query));
-	// var keywords = $.parseJSON(query);
 	var plainKeys = new Array();
 	var classKeys = new Array();
 	var propertyKeys = new Array();
@@ -331,7 +319,6 @@ function showResult() {
 	$('#resultPane').fadeIn();
 	$('#resultInfo').fadeIn();
 	if(isBool == null || isBool == '') {
-		//$('#recommendPane').fadeIn();
 		$('#facetFilterPane').fadeIn();
 	}
 	
@@ -349,17 +336,12 @@ function parseResult(json) {
 		//No result found
 		showNotFound();
 	}
-	// else if(size == 1) {
-		//Only 1 result found
-		// location.href=instanceViewerURL + json['result'][0]['uri'];
-	// }
 	else {
 		resultArray = json['result'];		
 		constructPagination(size);
 		displayPage(1);
 		constructRecommendList(json['recommend']);
 		showResult();		
-		//constructIntelList(json['intel']);
 		constructFacetFilter(json['filterOption']);
 		constructSourceFilter(json['sources']);
 		setResultInfo();
@@ -376,11 +358,9 @@ function roundDouble(num) {
 function constructFacetFilter(option) {
 	if(option['class']) {
 		$('#classFilterPane').show();
-		// $('#propertyFilterPane').hide();
 		constructClassFilter(option['class']['classTree']);
 	}
 	if(option['property']){
-		// $('#classFilterPane').hide();
 		$('#propertyFilterPane').show();
 		constructPropertyFilter(option['property']['array']);
 	}
@@ -401,10 +381,6 @@ function constructIntelList(intelList) {
 		$('#intelPane').hide();
 	}
 }
-
-
-
-
 
 function constructIntel(index, intel) {
 	var liElement = $('<li>');
@@ -435,7 +411,6 @@ function constructIntel(index, intel) {
 		'</div>').appendTo(modalElement);
 	var modalFooter = $('<div class="modal-footer">' +
 		'<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>' +
-//	'<button class="btn btn-primary">Save changes</button>' +
 '</div>').appendTo(modalElement);
 	
 	liElement.append(aElement);
@@ -510,13 +485,10 @@ function constructResult(result) {
 	var typeElement = $('<span>', {
 		title: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
 		text: 'type：',
-//		text: 'Type:',
 		class: 'typeSpan'
 	});
 	var sourceElement = $('<span>', {
-		//text: '数据源：' + result['source'] + ' 来源表：' + result['tableName'] ,
 		text: 'dataset：' + result['source'] ,
-//		text: 'Data Source:' + result['source'],
 		class: 'sourceSpan text-muted'	
 	});
 	var aElement = $('<span>',{
@@ -553,14 +525,11 @@ function constructSnippet(snippet) {
 		} else {
 			var prop = cur.split('：')[0];
 			var value = cur.split('：')[1];
-//			var prop = cur.split(':')[0];
-//			var value = cur.split(':')[1];
 			console.log(cur);
 			console.log(prop);
 			console.log(value);
 			var firstIndex = value.indexOf('<span class="hitted">');
 			spanElement.append(prop+'：...'+value.substring(firstIndex, firstIndex + 50) + ' ...');
-//			spanElement.append(prop+':...'+value.substring(firstIndex, firstIndex + 50) + '...');
 		}
 	}
 	return spanElement;
@@ -610,9 +579,6 @@ function constructRecommend(recommend) {
 	}).appendTo(liElement);
 	return liElement;
 }
-/*<label class="checkbox">
-							  <input type="checkbox" id="inlineCheckbox1" value="option1">nju28_3
-							</label>*/
 function constructSourceFilter(sourceList) {
 	var sourceFilterPane = $('#sourceFilterPane');
 	$.each(sourceList, function(index, val) {
@@ -633,7 +599,6 @@ function constructSourceFilter(sourceList) {
 		}
 		labelElement.append(inputElement);
 		labelElement.append(val['source'] + " (" + val['count'] + ")");
-		//labelElement.append(val['source']);
 		sourceFilterPane.append(labelElement);
 	});
 	var btnElement = $('<button>', {
@@ -670,7 +635,6 @@ function constructClassTreeNode(treeNode) {
 		text: className,
 		href: filterByClass(className)
 	});
-	//aElement.bind('click', filterByClass);
 	
 	if(className.indexOf('others') < 0)
 		liElement.append(aElement);
@@ -691,7 +655,6 @@ function constructClassTreeNode(treeNode) {
 
 function filterByClass(className) {
 	var keywords = $.parseJSON(decodeURIComponent(query));
-	// var keywords = $.parseJSON(query);
 	//remove all the class filters
 	for(var i = keywords.length - 1; i >= 0; i--)  {
 		var value = keywords[i];
@@ -854,9 +817,6 @@ function constructSelectInput(filter, index) {
 	divElement.append(removeElement);
 	return divElement;
 }
-
-
-
 
 
 function constructPagination(sumResultNum) {

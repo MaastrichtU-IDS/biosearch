@@ -39,7 +39,6 @@ import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
-import com.hp.hpl.jena.vocabulary.XSD;
 
 /**
  * @author "Cunxin Jia"
@@ -47,7 +46,6 @@ import com.hp.hpl.jena.vocabulary.XSD;
  */
 public class OntManager {
 	private static OntManager instance = null;
-	private String namespace;
 	private OntModel model;
 	private OntModel modelNoInf; //ontology model without inference
 	private Map<String, OntClass> classMap;
@@ -71,7 +69,6 @@ public class OntManager {
 		modelNoInf = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		InputStream input = OntManager.class.getClassLoader().getResourceAsStream(Params.ONT_PATH);
 		InputStream input2 = OntManager.class.getClassLoader().getResourceAsStream(Params.ONT_PATH);
-		namespace = Params.ONT_PREFIX;
 		if(input != null) {	
 			model.read(input, "RDF/XML-ABBREV");
 		}
@@ -249,26 +246,6 @@ public class OntManager {
 		return props;
 	}
 	
-	public List<String> getForwardDatatypeProp(String uri) {
-		Resource s = new ResourceImpl(uri);
-		List<String> props = new ArrayList<String> ();
-		ResIterator iter = model.listSubjectsWithProperty(RDFS.domain, s);
-		while(iter.hasNext()) {
-			Resource r = iter.next();
-			if(isDatatypeProperty(r) || isCompoundValueProperty(r.toString())) {
-				NodeIterator rangeIter = model.listObjectsOfProperty(r, RDFS.range);
-				while(rangeIter.hasNext()) {
-					RDFNode range = rangeIter.next();
-					if(range.isResource() && ((range.asResource()).equals(XSD.xint) ||
-							 (range.asResource()).getURI().equals("http://ws.nju.edu.cn/nju28/ValueWithUnit")) ) {
-						props.add(r.getURI());
-					}
-				}
-			}
-		}
-		return props;
-	}
-	
 	public boolean isDatatypeProperty(Resource property) {
 		boolean isDTP = false;
 		NodeIterator typeIter = model.listObjectsOfProperty(property, RDF.type);
@@ -282,17 +259,6 @@ public class OntManager {
 		return isDTP;
 	}
 	
-	public List<String> getBackwardProp(String uri) {
-		Resource s = new ResourceImpl(uri);
-		List<String> props = new ArrayList<String> ();
-		ResIterator iter = model.listSubjectsWithProperty(RDFS.range, s);
-		while(iter.hasNext()) {
-			Resource r = iter.next();
-			props.add(r.getURI());
-		}
-		return props;
-	}
-	
 	public String getLabel(String uri) {
 		String label = null;
 		Resource s = new ResourceImpl(uri);
@@ -304,32 +270,12 @@ public class OntManager {
 		return label;
 	}
 	
-	public boolean isCompoundValueProperty(String uri) {
-		Resource prop = new ResourceImpl(uri);
-		NodeIterator iter = model.listObjectsOfProperty(prop, RDFS.range);
-		if(!iter.hasNext()) {
-			return false;
-		}
-		while(iter.hasNext()) {
-			RDFNode node = iter.next();
-			if(node instanceof Resource) {
-				String rangeURI = ((Resource) node).getURI();
-				if(!rangeURI.equals(namespace + "ValueWithUnit")) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
 	public List<OntClass> listClasses() {
 		List<OntClass> classes = new ArrayList<OntClass> (classMap.values());
 		return classes;
 	}
 	
 	public List<OntProperty> listProperties() {
-//		List<OntProperty> props = new ArrayList<OntProperty> (propMap.values());
-//		return props;
 		return propListed;
 	}
 	
@@ -417,7 +363,6 @@ public class OntManager {
 		Map<String, PropertyTree> propTreeMap = new HashMap<String, PropertyTree> ();
 		List<String> props = new ArrayList<String> ();
 		for(int i = 0; i < pvArray.size(); i++) {
-//			System.out.println(pvArray.get(i).toString());
 			JSONObject pv = (JSONObject)pvArray.get(i);
 			String prop = pv.get("prop").toString();
 			String URI = pv.get("URI").toString();
@@ -436,7 +381,6 @@ public class OntManager {
 			else if(value instanceof String) {
 				valueJSON.put("single", value);
 			}
-//			String propLabel = getLabel(prop);
 			propTreeMap.put(prop, new PropertyTree(prop, URI, valueJSON, isObject, source));
 			props.add(prop);
 		}
@@ -468,16 +412,5 @@ public class OntManager {
 		tree.sort();
 		return tree;
 	}
-	
-	public static void main(String[] args) {
-		Config conf = new Config();
-		conf.setParams();
-		OntManager om = new OntManager();
-		om.getAssociatedClass("http://ws.nju.edu.cn/nju28/hkmj");
-		om.getAssociatedClass("http://ws.nju.edu.cn/nju28/bd");
-		om.getAssociatedClass("http://ws.nju.edu.cn/nju28/ry");
-//		om.getAssociatedClass("http://ws.nju.edu.cn/nju28/bs");
-//		om.getAssociatedClass("http://ws.nju.edu.cn/nju28/dd");
-		
-	}
+
 }

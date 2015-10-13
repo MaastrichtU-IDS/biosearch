@@ -58,25 +58,18 @@ public class Instance extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
-		String instURI = req.getParameter("instURI");
-		this.instURI = instURI;
-//		String source = KeywordSearcher.getInstance().getInstanceSource(instURI);
+		instURI = req.getParameter("instURI");
 		instURI = URLDecoder.decode(instURI, "utf-8");
 		SPARQLQueryExecutor executor = ExecutorManager.getInstance().getExecutor(DatasetService.getSource(instURI));
 		if(executor == null) {
 			resp.setContentType("text/json; charset=UTF-8");
 			resp.getWriter().print(new JSONObject());
-			//resp.sendRedirect(instURI);
 			return;
 		}
 		Model model = executor.execDescribe(instURI);
 		executor.close();
-//		Set<Intel> intels = getIntel();
 		List<String> uList = new ArrayList<String> ();
 		uList.add(instURI);
-//		List<String> recos = Reco2.reco(uList, 5);
-//		List<String> recos = new ArrayList<String> ();
-//		Map<String, String> recos = Reco2.recommend(uList);
 		List<ResultItem> recos = RecommendationEngine.getRecommendedEntities(new ResultItem(instURI));
 		List<ResultItem> corefs = CoreferenceService.getCorefs(model);
 		List<String> refs = ReferenceService.getReferences(instURI);
@@ -125,65 +118,28 @@ public class Instance extends HttpServlet {
 		}
 		return jsonArray;
 	}
-/*	
-	private JSONArray constructIntelListJSON2(Set<Intel> intelSet) {
-		JSONArray jsonArray = new JSONArray();
-		if(intelSet == null || intelSet.isEmpty()) return jsonArray;
-		List<Intel> intelList = new ArrayList<Intel>(intelSet);
-		if(intelList.size() > 5)
-		intelList = intelList.subList(0, 5);
-		Collections.sort(intelList, intelList.get(0).getTimeComparator());
-		
-		for(Intel intel : intelList) {
-			JSONObject item = new JSONObject();
-			item.put("content", intel.getContentWithKeyword());
-			item.put("date", intel.getDateString());
-			item.put("time", intel.getTimeString());
-			item.put("keyword", intel.getKeyword());
-			jsonArray.add(item);
-		}
-		return jsonArray;
-	}
-	
-	private Set<Intel> getIntel() {
-		Set<Intel> intels = new HashSet<Intel> ();
-		String instLabel = keywordSearcher.getInstanceLabel(instURI);
-		intels.addAll(IntelManager.getInstance().getRelativeIntel(instLabel));
-		return intels;
-	}
-*/	
+
 	private JSONObject constructResultJSON(Model model, List<ResultItem> recos, List<ResultItem> corefs,List<String> refs) {
 		JSONObject instJSON = new JSONObject();
 		JSONArray pvArrayJSON = constructInstanceJSON(model);
 		JSONArray refJSON = constructRefListJSON(refs);
-//		JSONArray intelsJSON2 = constructIntelListJSON2(intels);
 		JSONArray recosJSON = constructRecommendListJSON(recos);
 		JSONArray corefsJSON = constructCorefListJSON(corefs);
 		PropertyTree tree = om.getPropertyHierarchy(pvArrayJSON);
-//		System.out.println(tree);
 		instJSON.put("subject", instURI);
 		instJSON.put("pvarray", tree);
 		instJSON.put("recommend", recosJSON);
 		instJSON.put("coreference", corefsJSON);
 		instJSON.put("reference", refJSON);
-//		instJSON.put("intel2", intelsJSON2);
 		instJSON.put("label", DatasetService.getLabel(instURI));
 		instJSON.put("img", ImageService.getImage(instURI));
-//		instJSON.put("type", keywordSearcher.getInstanceType(instURI));
 		return instJSON;
 		
 	}
 	
 	private String constructLiteralString(Literal literal) {
 		String literalString = null;
-//		if(literal.getDatatypeURI().equals(XSD.date.getURI())) {
-//			Date date = new Date(literal.getLexicalForm());
-//			DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
-//			literalString = dateformat.format(date);
-//		}
-//		else {
 			literalString = literal.getLexicalForm();
-//		}
 		return literalString;
 	}
 	
@@ -260,7 +216,6 @@ public class Instance extends HttpServlet {
 		while(iter.hasNext()){
 			Statement stmt = iter.nextStatement();
 
-//			System.out.println(stmt.toString());
 			Property predicate = stmt.getPredicate();
 			
 			String predicateURI = null;
@@ -338,7 +293,7 @@ public class Instance extends HttpServlet {
 			}
 			String source = DatasetService.getSource(uri);
 			if(source == null)
-				value = String.format("<a target='_blank' href ='%s' title='%s'>%s</a>", uri, uri, uri);
+				value = String.format("<a target='_blank' href ='%s' title='%s'><img src='resources/img/outlink.png' width='8' height='8'/></a>", uri, uri);
 			else {
 				String label = DatasetService.getLabel(uri);
 				if(label == null) return null;

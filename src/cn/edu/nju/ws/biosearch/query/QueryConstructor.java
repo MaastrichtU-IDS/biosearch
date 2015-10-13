@@ -1,13 +1,9 @@
 package cn.edu.nju.ws.biosearch.query;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import cn.edu.nju.ws.biosearch.fusion.OntMappingService;
 
@@ -136,15 +132,4 @@ public class QueryConstructor {
 		return triplePatterns;
 	}
 	
-	public static void main(String[] args) {
-//		QueryConstructor constructor = new QueryConstructor();
-//		Set<String> k0 = new TreeSet<String>();
-//		Set<String> k1 = new TreeSet<String>(Arrays.asList("Protein", "Cell"));
-//		Set<String> c0 = new TreeSet<String>();
-//		Set<String> c1 = new TreeSet<String>(Arrays.asList("http://bio2rdf.org/drugbank_vocabulary:Drug", "http://bio2rdf.org/drugbank_vocabulary:Enzyme"));
-//		Set<String> p0 = new TreeSet<String>();
-//		Set<String> p1 = new TreeSet<String>(Arrays.asList("http://bio2rdf.org/drugbank_vocabulary:absorption", "http://bio2rdf.org/drugbank_vocabulary:action"));
-//		System.out.println(constructor.constructQuery(k0, c1, p1, ""));
-		System.out.println("Beta-propeller protein-associated neurodegeneration [orphanet:329284]".replaceAll("\\[\\w+:\\w+\\]", ""));
-	}
 }

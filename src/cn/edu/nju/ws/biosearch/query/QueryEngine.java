@@ -1,18 +1,13 @@
 package cn.edu.nju.ws.biosearch.query;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
-import org.apache.jena.atlas.logging.Log;
-import org.apache.log4j.Layout;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 
 import cn.edu.nju.ws.biosearch.datasource.DataSourceManager;
 import cn.edu.nju.ws.biosearch.executor.ExecutorManager;
@@ -60,7 +55,6 @@ public class QueryEngine {
 				String URI = s.asResource().getURI();
 				ResultItem item = resultMap.get(URI);
 				if(item == null) {
-//					item = new ResultItem(URI, source);
 					item = new ResultItem(URI);
 					if(item.getSource() == null) continue;
 					resultMap.put(URI, item);
@@ -118,9 +112,4 @@ public class QueryEngine {
 		return count;
 	}
 	
-	public static void main(String[] args) {
-		QueryEngine qe = new QueryEngine();
-		Set<String> keywords = new TreeSet<String> (Arrays.asList("triceps"));
-		qe.query(keywords, null, null, null);
-	}
 }

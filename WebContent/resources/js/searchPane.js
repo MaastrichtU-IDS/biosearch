@@ -133,7 +133,6 @@ function convertPlainText() {
 
 function addTagToSearchInput(text) {
 	$('#searchInput').textext()[0].tags().addTags([ text ]);
-	//console.log($('#searchInput').val());
 }
 
 function updateFromCache() {

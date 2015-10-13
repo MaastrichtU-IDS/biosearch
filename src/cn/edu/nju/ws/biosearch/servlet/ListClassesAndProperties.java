@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -72,28 +71,7 @@ public class ListClassesAndProperties extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		String json = request.getParameter("term");
 		if(json != null){
-			
-			
-//			List<String> clsArray = null;
-//			List<String> propArray = null;
-//			clsArray = new CompleteWrapperForCls().tip(100);
-//			propArray = new CompleteWrapperForProp().tip(100);
-//			JSONArray elements = new JSONArray();
-//			for(String item : clsArray){
-//				JSONObject jsob = new JSONObject();
-//				jsob.put("name", item);
-//				elements.add("C:" + item);
-//			}
-//			for(String item : propArray){
-//				JSONObject jsob = new JSONObject();
-//				jsob.put("name", item);
-//				elements.add("P:" + item);
-//			}
-//			JSONObject result = new JSONObject();
-//			result.put("result", elements);
-//			response.getWriter().print(elements);
 			OntManager om = OntManager.getInstance();
-//			KeywordSearcher searcher = KeywordSearcher.getInstance();
 			List<OntClass> classes = om.listClasses();
 			List<OntProperty> props = om.listProperties();
 			List<String> items = new ArrayList<String>();

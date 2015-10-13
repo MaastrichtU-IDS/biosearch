@@ -67,9 +67,6 @@ function constructInstancePane(sentenceArray) {
 
 function constructInstanceImage() {
 	var prefix = 'img/instance/';
-	var curInstance = uri.substring(uri.indexOf('nju28/') + 6);
-	var instanceType = curInstance.split('/')[0];
-	var instanceId = curInstance.split('/')[1].split('=')[1];
 	var instanceImgURL = img;
 	var imgExisted = false;
 	var imgElement = imgElement = $('<img>', {
@@ -167,7 +164,6 @@ function constructTreeNode(treeNode) {
 
 function parseValue(treeNode) {
 	var URI = treeNode['URI'];
-	var isObject = treeNode['isObject'];
 	var prop = treeNode['property'];
 	var value = treeNode['value'];
 	var source = treeNode['source'];
@@ -179,8 +175,8 @@ function parseValue(treeNode) {
 		if(value['single']) {
 			value['single']= dropTail(prop, value['single']);
 			prop = dropMark(prop, value['single'], source);
-			valueHTML.append($('<span>').html('<strong title=' + URI + '>' + prop  + '</strong>：' + value['single']));
-			appendOutOfDatasetsImg(valueHTML, value['single'], isObject);
+			valueHTML.append($('<span>').html('<strong title=' + URI + '>' + prop  + '</strong>：'));
+			appendPropValue(valueHTML, value['single']);
 
 			valueHTML.addClass('child');
 		}
@@ -197,15 +193,16 @@ function parseValue(treeNode) {
 				var liElement = $('<li>').addClass('child');
 				liElement.css('list-style-type', 'none');
 				value = dropTail(prop, value);
-				liElement.append($('<span>').html(value));
-				appendOutOfDatasetsImg(liElement, value, isObject);
-
+				appendPropValue(liElement, value);
 				ulElement.append(liElement);
 			});
 			ulElement.css('display', 'none');
 			valueHTML.append(aElement);
-			valueHTML.append($('<span>').html('：' + dropTail(prop, value['multi'][0])));
-			appendOutOfDatasetsImg(valueHTML, value['multi'][0], isObject);
+			valueHTML.append($('<span>').html('：'));
+			var value = dropTail(prop, value['multi'][0]);
+			
+			appendPropValue(valueHTML, value);
+
 			valueHTML.append($('<span>').html(' ...'));
 
 			valueHTML.append(ulElement);
@@ -219,17 +216,8 @@ function parseValue(treeNode) {
 	return valueHTML;
 }
 
-function appendOutOfDatasetsImg(liElement, value, isObject) {
-	if(value.indexOf('instance.html?inst=') < 0 && isObject == 'true') {
-		var imgElement = $('<img>', {
-			src: 'resources/img/outlink.png',
-			width: '8',
-			height: '8'
-		});
-
-		liElement.append($('<span>').html(' '));
-		liElement.append(imgElement);
-	}
+function appendPropValue(liElement, value) {
+	liElement.append($('<span>').html(value));
 }
 
 function constructReferenceList(refList) {
@@ -555,10 +543,20 @@ function appendGroups(ulElement) {
 
 function dropTail(prop, value) {
 	if(prop == 'label') return value;
-	var reg = new RegExp(".*\\[.*\\](</a>)?$");
+	var reg = new RegExp("^\\[.*?\\]$") 
+	if(reg.test(value)) return value;
+	reg = new RegExp("<.*?>\\[.*?\\]</a>$");
+	if(reg.test(value))	return value;
+
+	reg = new RegExp(".*\\[[^\\[]*\\](</a>)?$");
 	if(reg.test(value)) {
-		var regg = new RegExp("\\[.*\\](</a>)?$");
-		value = value.replace(regg, "</a>");
+		var regg = new RegExp("\\[[^\\[]*\\]</a>$");
+		if(regg.test(value))
+			value = value.replace(regg, "</a>");
+		else {
+			regg = new RegExp("\\[[^\\[]*\\]$");
+			value = value.replace(regg, "");
+		}
 	}
 	return value;
 }

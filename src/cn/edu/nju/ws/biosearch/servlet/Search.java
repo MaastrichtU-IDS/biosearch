@@ -41,7 +41,6 @@ public class Search extends HttpServlet {
 	private Set<String> reqClassList;
 	private Set<String> reqSourceList;
 	private Set<String> reqPropList;
-//	private Set<Entry<String, String>> reqPropList;
 	private List<ResultItem> resultList;
 	private OntManager om;
 	private QueryEngine qe;
@@ -62,9 +61,6 @@ public class Search extends HttpServlet {
 		conf.setParams();
 		om = OntManager.getInstance();
 		qe = new QueryEngine();
-//		im = IntelManager.getInstance();
-//		swc = new SearchWithConditionImpl();
-//		keywordSearcher = KeywordSearcher.getInstance();
 	}
 
 	/**
@@ -95,10 +91,7 @@ public class Search extends HttpServlet {
 		JSONObject resultJSON = null;
 		if(isBoolean == null || isBoolean.trim().equals("")) {
 			
-//			Set<Intel> intelList = getIntelList();
-//			Map<String, String> recoMap = Reco2.recommend(resultList);
 			Set<String> sourcesList = DataSourceManager.getInstance().listSourceNames();//swc.getSourcesOfResults();
-	//		Map<String, String> recoMap = new HashMap<String, String> ();
 			List<ResultItem> recoList = RecommendationEngine.getRecommendedEntities(resultList);
 			resultJSON = constructResultJSON(resultList, null, recoList, sourcesList, duration);
 		}
@@ -139,7 +132,6 @@ public class Search extends HttpServlet {
 		reqClassList = new HashSet<String> ();
 		reqSourceList = new HashSet<String> ();
 		reqPropList  = new HashSet<String> ();
-//		reqPropList = new HashSet<Entry<String, String>> ();
 		
 		for(int i = 0; i < requestArray.size(); i++) { 
 			String requestItem = requestArray.get(i).toString();
@@ -172,7 +164,6 @@ public class Search extends HttpServlet {
 						range = "[" + range + "," + range + "]";
 					}
 				}
-//				reqPropList.add(new RangeEntry(propURI, range));
 				reqPropList.add(propURI);
 			}
 		}
@@ -185,17 +176,13 @@ public class Search extends HttpServlet {
 	private JSONObject constructResultJSON(List<ResultItem> resultList, Set<String> intelList, List<ResultItem> recoList, Set<String> sourcesList, long duration) {
 		JSONObject resultJSON = new JSONObject();
 		JSONArray resultListJSON = constructResultListJSON(resultList);
-//		JSONArray intelListJSON = constructIntelListJSON(intelList);
 		JSONArray recoListJSON = constructRecommendListJSON(recoList);
 		JSONArray sourcesListJSON = constructSourceListJSON(sourcesList);
-//		Facet facet = new Facet(resultList);
-//		FacetFilter.setFacetFilter(facet);
 		JSONObject filterOption = new JSONObject();
 		JSONObject classFilterOption = getClassFilterOption(resultList);
 		filterOption.put("class", classFilterOption);
 		
 		resultJSON.put("result", resultListJSON);
-//		resultJSON.put("intel", intelListJSON);
 		resultJSON.put("size", resultListJSON.size());
 		resultJSON.put("time", duration * 0.001) ;
 		resultJSON.put("recommend", recoListJSON);
@@ -208,7 +195,6 @@ public class Search extends HttpServlet {
 		JSONArray jsonArray = new JSONArray();
 		if(recoList == null) return jsonArray;
 		for(ResultItem reco : recoList) {
-		//	reco.put("reason", "Interaction");
 			jsonArray.add(reco.toJSON());
 		}
 		return jsonArray;
@@ -220,7 +206,6 @@ public class Search extends HttpServlet {
 		for(ResultItem result : resultList) {
 			JSONObject item = constructResultItemJSON(result);
 			jsonArray.add(item);
-//			System.out.println(result.getScore());
 		}
 		return jsonArray;
 	}
@@ -258,7 +243,6 @@ public class Search extends HttpServlet {
 				if(splitted.length == 2) {
 					String propertyURI = splitted[0];
 					String value = splitted[1];
-//					String propertyLabel = om.getLabel(propertyURI);
 					String propertyLabel = propertyURI;
 					if(propertyLabel != null) {
 						snippets.add(String.format("<span class=\"hitted\">%s</span>：%s", propertyLabel, value));
@@ -283,7 +267,6 @@ public class Search extends HttpServlet {
 				String snippetPropURI = splitted[0];
 				String snippetPropLN = splitted[1];
 				String snippetValue = splitted[2];
-	//			String snippetPropLabel = om.getLabel(snippetPropURI);
 				String snippetPropLabel = "<span title=\"" + snippetPropURI + "\">" + DatasetService.getLabel(snippetPropLN) + "</span>";
 				String snippetQuery = splitted[3];
 				String[] snippetQueryItems = snippetQuery.split(" ");
@@ -310,7 +293,6 @@ public class Search extends HttpServlet {
 		for(String source : sourcesList) {
 			JSONObject item = new JSONObject();
 			item.put("source", source);
-//			int count = swc.getResultCount(source);
 			int count = qe.getResultCount(source);
 			item.put("count", count);
 			if(count != 0)

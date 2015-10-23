@@ -258,13 +258,24 @@ public class Instance extends HttpServlet {
 		}
 	}
 	
-	private boolean isIncomingXLink(Statement stmt) {
+	private boolean isXLink(Statement stmt) {
 		Property predicate = stmt.getPredicate();
 		RDFNode object = stmt.getObject();
 		if(!object.isResource()) return false;
+		
+		if(predicate.getLocalName().contains("x-")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean isIncomingXLink(Statement stmt) {
+		if(!isXLink(stmt)) return false;
+		RDFNode object = stmt.getObject();
 		String uri = object.asResource().getURI();
 		
-		if(uri.equals(instURI) && predicate.getLocalName().contains("x-")) { //incoming x-link
+		if(uri.equals(instURI)) { //incoming x-link
 			return true;
 		} else {
 			return false;
@@ -297,7 +308,12 @@ public class Instance extends HttpServlet {
 			else {
 				String label = DatasetService.getLabel(uri);
 				if(label == null) return null;
-				value = String.format("<a href ='instance.html?inst=%s' title='%s'>%s</a>", uri, uri, label);
+				if(isXLink(stmt)) {
+					value = String.format("<a href ='instance.html?inst=%s' title='%s'>%s</a>"
+							+ "<a href ='%s' title='%s'><img src='resources/img/outlink.png' width='8' height='8' /></a>", uri, uri, label, uri, uri);
+				} else {
+					value = String.format("<a href ='instance.html?inst=%s' title='%s'>%s</a>", uri, uri, label);
+				}
 			}
 		}
 		return value;

@@ -76,6 +76,9 @@ public class ResultItem {
 		if(label == null) {
 			label = new ResourceImpl(uri).getLocalName();
 		}
+		if(label == null || label.equals("")) {
+			label = DatasetService.simpleLabel(uri);
+		}
 		this.type = DatasetService.getType(uri, source);
 		if(this.type.size() > 0)
 			this.typeLabel = DatasetService.getLabel(this.type.get(0));

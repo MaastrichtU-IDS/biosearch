@@ -46,6 +46,20 @@ public class DatasetService {
 		
 		return label;
 	}
+	
+	public static String simpleLabel(String label) {
+		if (label.contains("#")) {
+			label = label.substring(label.indexOf('#')+1);
+			return label;
+		}
+		
+		if (label.contains("/")) {
+			label = label.substring(label.lastIndexOf('/')+1);
+			return label;
+		}
+		
+		return label;
+	}
 
 	public static List<String> getType(String uri, String source) {
 		List<String> type = new ArrayList<String> ();

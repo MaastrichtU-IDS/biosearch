@@ -304,7 +304,12 @@ public class Instance extends HttpServlet {
 			}
 			String source = DatasetService.getSource(uri);
 			if(source == null)
-				value = String.format("<a target='_blank' href ='%s' title='%s'><img src='resources/img/outlink.png' width='8' height='8'/></a>", uri, uri);
+				if(isXLink(stmt)) {
+					value = String.format("<a href ='instance.html?inst=%s' title='%s'>%s</a>"
+							+ "<a href ='%s' title='%s'><img src='resources/img/outlink.png' width='8' height='8' /></a>", uri, uri, uri, uri, uri);
+				} else {
+					value = String.format("<a target='_blank' href ='%s' title='%s'><img src='resources/img/outlink.png' width='8' height='8'/></a>", uri, uri);
+				}
 			else {
 				String label = DatasetService.getLabel(uri);
 				if(label == null) return null;

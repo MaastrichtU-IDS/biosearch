@@ -340,7 +340,7 @@ function parseResult(json) {
 		resultArray = json['result'];		
 		constructPagination(size);
 		displayPage(1);
-		constructRecommendList(json['recommend']);
+//		constructRecommendList(json['recommend']);
 		showResult();		
 		constructFacetFilter(json['filterOption']);
 		constructSourceFilter(json['sources']);
@@ -545,40 +545,6 @@ function constructPropSnippet(propSnippet) {
 	return spanElement;
 }
 
-function constructRecommendList(recoArray) {
-	var recommendPane = $('#recommendPane');
-	var recommendList = $('<ul>');
-	var recoSize = (recoArray.length > g_maxRecoSize) ? g_maxRecoSize : recoArray.length;	
-	for(var i = 0; i < recoSize; i++) {
-		var liElement = constructRecommend(recoArray[i]);
-		recommendList.append(liElement);
-	}
-	recommendPane.append(recommendList);
-	if(recoArray.length > 0) {
-		recommendPane.fadeIn();
-	}
-	else {
-		recommendPane.hide();
-	}
-}
-
-function constructRecommend(recommend) {
-	var liElement = $('<li>');
-	var aElemet = $('<a>', {
-		text: recommend['label'],
-		href: instanceViewerURL + recommend['uri']
-	}).appendTo(liElement);
-	liElement.append($('<br>'));
-	var spanElement = $('<span>', {
-		text: recommend['typeLabel'],
-		class: 'typeSpan'
-	}).appendTo(liElement);
-	liElement.append($('<br>'));
-	var reasonSpanElement = $('<span>', {
-		text: recommend['reason'],
-	}).appendTo(liElement);
-	return liElement;
-}
 function constructSourceFilter(sourceList) {
 	var sourceFilterPane = $('#sourceFilterPane');
 	$.each(sourceList, function(index, val) {

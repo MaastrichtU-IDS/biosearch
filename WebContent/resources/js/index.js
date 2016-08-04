@@ -1,9 +1,7 @@
 ﻿$(document).ready(init);
-var segmentServiceURL = '/Semantic-Annotation/SegmentService';
 function init() {			
 	 initSearchPane();
 	 initSampleQueries();
-	 //initSegmentService();
 }
 
 function initSampleQueries() {
@@ -12,20 +10,6 @@ function initSampleQueries() {
 
 function sampleQueryHandler() {
 	addTagToSearchInput(this.text);
-}
-
-function initSegmentService() {
-	disableSearchBtn();
-	$.ajax({
-		url: segmentServiceURL,
-		type:'get',
-		data: {raw: 'test'},
-		statusCode: {
-			200: function callback(resp) {				
-				enableSearchBtn();
-			}
-		}
-	});
 }
 
 function disableSearchBtn() {

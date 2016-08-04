@@ -45,7 +45,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
  *
  */
 public class OntManager {
-	private static OntManager instance = null;
+	private static OntManager inst = null;
 	private OntModel model;
 	private OntModel modelNoInf; //ontology model without inference
 	private Map<String, OntClass> classMap;
@@ -53,11 +53,15 @@ public class OntManager {
 	private Map<String, OntProperty> propMap;
 	private List<OntProperty> propListed;
 	
-	public static synchronized OntManager getInstance() {
-		if(instance == null) {
-			instance = new OntManager();
+	public static OntManager getInstance() {
+		if(inst == null) {
+			synchronized(OntManager.class) {
+				if(inst == null) {
+					inst = new OntManager();
+				}
+			}
 		}
-		return instance;
+		return inst;
 	}
 	
 	
@@ -359,6 +363,7 @@ public class OntManager {
 		return count;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public PropertyTree getPropertyHierarchy (JSONArray pvArray) {
 		Map<String, PropertyTree> propTreeMap = new HashMap<String, PropertyTree> ();
 		List<String> props = new ArrayList<String> ();

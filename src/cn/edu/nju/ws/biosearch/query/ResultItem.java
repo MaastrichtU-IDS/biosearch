@@ -95,6 +95,7 @@ public class ResultItem {
 		additionalInfo.put(key, value);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 		json.put("uri", uri);

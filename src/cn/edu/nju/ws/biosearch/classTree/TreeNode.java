@@ -95,6 +95,7 @@ public class TreeNode implements Comparable<TreeNode>{
 		this.subTree = subTree;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public String toString() {
 		JSONObject json = new JSONObject();
@@ -102,7 +103,6 @@ public class TreeNode implements Comparable<TreeNode>{
 		json.put("count", count);
 		json.put("uri", uri);
 		if(subTree != null) {
-			String subTreeJSONString = subTree.toString();
 			json.put("subTree", subTree);
 		}
 		return json.toString();

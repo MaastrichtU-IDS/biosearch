@@ -51,6 +51,7 @@ public class ClassTree {
 		Collections.sort(nodes);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public String toString() {
 		JSONArray jsonArray = new JSONArray();

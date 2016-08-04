@@ -16,7 +16,7 @@ import org.json.simple.JSONObject;
  *
  */
 
-public class PropertyTree implements Comparable {
+public class PropertyTree implements Comparable<Object> {
 	String property;
 	String URI;
 	String isObject;
@@ -68,6 +68,7 @@ public class PropertyTree implements Comparable {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public String toString() {
 		JSONObject json = new JSONObject();

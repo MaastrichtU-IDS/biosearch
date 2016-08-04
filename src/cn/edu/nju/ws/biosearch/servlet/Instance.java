@@ -5,9 +5,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,10 +23,7 @@ import cn.edu.nju.ws.biosearch.ontology.PropertyTree;
 import cn.edu.nju.ws.biosearch.query.DatasetService;
 import cn.edu.nju.ws.biosearch.query.ImageService;
 import cn.edu.nju.ws.biosearch.query.ResultItem;
-import cn.edu.nju.ws.biosearch.recommend.RecommendationEngine;
-import cn.edu.nju.ws.biosearch.recommend.ReferenceService;
 
-import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -70,10 +65,8 @@ public class Instance extends HttpServlet {
 		executor.close();
 		List<String> uList = new ArrayList<String> ();
 		uList.add(instURI);
-		List<ResultItem> recos = RecommendationEngine.getRecommendedEntities(new ResultItem(instURI));
 		List<ResultItem> corefs = CoreferenceService.getCorefs(model);
-		List<String> refs = ReferenceService.getReferences(instURI);
-		JSONObject instJSON = constructResultJSON(model, recos, corefs, refs);
+		JSONObject instJSON = constructResultJSON(model, corefs);
 		resp.setContentType("text/json; charset=UTF-8");
 		resp.getWriter().print(instJSON);
 	}
@@ -90,15 +83,7 @@ public class Instance extends HttpServlet {
 		om = OntManager.getInstance();
 	}
 	
-	
-	private JSONArray constructRecommendListJSON(List<ResultItem> recos) {
-		JSONArray jsonArray = new JSONArray();
-		for(ResultItem reco : recos) {
-			jsonArray.add(reco.toJSON());
-		}
-		return jsonArray;
-	}
-	
+	@SuppressWarnings("unchecked")
 	private JSONArray constructCorefListJSON(List<ResultItem> corefs) {
 		JSONArray jsonArray = new JSONArray();
 		for(ResultItem coref : corefs) {
@@ -107,49 +92,22 @@ public class Instance extends HttpServlet {
 		return jsonArray;
 	}
 	
-	private JSONArray constructRefListJSON(List<String> refs) {
-		JSONArray jsonArray = new JSONArray();
-		if(refs == null || refs.isEmpty()) return jsonArray;
-		
-		for(String ref : refs) {
-			JSONObject item = new JSONObject();
-			item.put("id", ref);
-			jsonArray.add(item);
-		}
-		return jsonArray;
-	}
-
-	private JSONObject constructResultJSON(Model model, List<ResultItem> recos, List<ResultItem> corefs,List<String> refs) {
+	@SuppressWarnings("unchecked")
+	private JSONObject constructResultJSON(Model model, List<ResultItem> corefs) {
 		JSONObject instJSON = new JSONObject();
 		JSONArray pvArrayJSON = constructInstanceJSON(model);
-		JSONArray refJSON = constructRefListJSON(refs);
-		JSONArray recosJSON = constructRecommendListJSON(recos);
 		JSONArray corefsJSON = constructCorefListJSON(corefs);
 		PropertyTree tree = om.getPropertyHierarchy(pvArrayJSON);
 		instJSON.put("subject", instURI);
 		instJSON.put("pvarray", tree);
-		instJSON.put("recommend", recosJSON);
 		instJSON.put("coreference", corefsJSON);
-		instJSON.put("reference", refJSON);
 		instJSON.put("label", DatasetService.getLabel(instURI));
 		instJSON.put("img", ImageService.getImage(instURI));
 		return instJSON;
 		
 	}
 	
-	private String constructLiteralString(Literal literal) {
-		String literalString = null;
-			literalString = literal.getLexicalForm();
-		return literalString;
-	}
-	
-	private JSONObject constructPVJSON(String prop, String value) {
-		JSONObject pvJSON = new JSONObject();
-		pvJSON.put("prop", prop);
-		pvJSON.put("value", value);
-		return pvJSON;
-	}
-	
+	@SuppressWarnings("unchecked")
 	private JSONArray constructInstanceJSON(Model model) {
 		JSONArray pvArray = new JSONArray();
 		HashMap<String, JSONArray> pvHashMap = constructPVHashMap(model);
@@ -210,6 +168,7 @@ public class Instance extends HttpServlet {
 		return pvArray;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private HashMap<String, JSONArray> constructPVHashMap(Model model) {
 		HashMap<String, JSONArray> pvHashMap = new HashMap<String, JSONArray>();
 		StmtIterator iter = model.listStatements();
@@ -235,15 +194,10 @@ public class Instance extends HttpServlet {
 			valueField.add(getValue(stmt));
 		}
 		
-		Iterator it = pvHashMap.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry entry = (Map.Entry) it.next();
-			Object key = entry.getKey();
-			Object val = entry.getValue();
-			
+		for(String key : pvHashMap.keySet()) {
+			JSONArray val = pvHashMap.get(key);
 			pvHashMap.put((String) key, reduceDuplicateValue((JSONArray) val));
 		}
-		
 		return pvHashMap;
 	}
 	
@@ -303,18 +257,14 @@ public class Instance extends HttpServlet {
 				uri = object.asResource().getURI();
 			}
 			String source = DatasetService.getSource(uri);
-			if(source == null)
-				if(isXLink(stmt)) {
-					value = String.format("<a href ='instance.html?inst=%s' title='%s'>%s</a>"
+			if(source == null) {
+					value = String.format("<a href ='instance.html?inst=%s' title='%s'>%s&nbsp</a>"
 							+ "<a href ='%s' title='%s'><img src='resources/img/outlink.png' width='8' height='8' /></a>", uri, uri, uri, uri, uri);
-				} else {
-					value = String.format("<a target='_blank' href ='%s' title='%s'><img src='resources/img/outlink.png' width='8' height='8'/></a>", uri, uri);
-				}
-			else {
+			} else {
 				String label = DatasetService.getLabel(uri);
 				if(label == null) return null;
 				if(isXLink(stmt)) {
-					value = String.format("<a href ='instance.html?inst=%s' title='%s'>%s</a>"
+					value = String.format("<a href ='instance.html?inst=%s' title='%s'>%s&nbsp</a>"
 							+ "<a href ='%s' title='%s'><img src='resources/img/outlink.png' width='8' height='8' /></a>", uri, uri, label, uri, uri);
 				} else {
 					value = String.format("<a href ='instance.html?inst=%s' title='%s'>%s</a>", uri, uri, label);
@@ -324,6 +274,7 @@ public class Instance extends HttpServlet {
 		return value;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private JSONArray reduceDuplicateValue(JSONArray valueField) {
 		HashSet<String> hashValueField = new HashSet<String>();
 		for(int i = 0; i < valueField.size(); i ++) {

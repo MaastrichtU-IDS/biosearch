@@ -28,7 +28,6 @@ import cn.edu.nju.ws.biosearch.ontology.OntManager;
 import cn.edu.nju.ws.biosearch.query.DatasetService;
 import cn.edu.nju.ws.biosearch.query.QueryEngine;
 import cn.edu.nju.ws.biosearch.query.ResultItem;
-import cn.edu.nju.ws.biosearch.recommend.RecommendationEngine;
 import cn.edu.nju.ws.biosearch.utils.Config;
 
 /**
@@ -92,11 +91,10 @@ public class Search extends HttpServlet {
 		if(isBoolean == null || isBoolean.trim().equals("")) {
 			
 			Set<String> sourcesList = DataSourceManager.getInstance().listSourceNames();//swc.getSourcesOfResults();
-			List<ResultItem> recoList = RecommendationEngine.getRecommendedEntities(resultList);
-			resultJSON = constructResultJSON(resultList, null, recoList, sourcesList, duration);
+			resultJSON = constructResultJSON(resultList, null, sourcesList, duration);
 		}
 		else {
-			resultJSON = constructResultJSON(resultList, null, null, null, duration);
+			resultJSON = constructResultJSON(resultList, null, null, duration);
 		}
 		response.setContentType("text/json; charset=UTF-8");
 		response.getWriter().print(resultJSON);
@@ -173,10 +171,10 @@ public class Search extends HttpServlet {
 		}
 	}
 	
-	private JSONObject constructResultJSON(List<ResultItem> resultList, Set<String> intelList, List<ResultItem> recoList, Set<String> sourcesList, long duration) {
+	@SuppressWarnings("unchecked")
+	private JSONObject constructResultJSON(List<ResultItem> resultList, Set<String> intelList, Set<String> sourcesList, long duration) {
 		JSONObject resultJSON = new JSONObject();
 		JSONArray resultListJSON = constructResultListJSON(resultList);
-		JSONArray recoListJSON = constructRecommendListJSON(recoList);
 		JSONArray sourcesListJSON = constructSourceListJSON(sourcesList);
 		JSONObject filterOption = new JSONObject();
 		JSONObject classFilterOption = getClassFilterOption(resultList);
@@ -185,22 +183,12 @@ public class Search extends HttpServlet {
 		resultJSON.put("result", resultListJSON);
 		resultJSON.put("size", resultListJSON.size());
 		resultJSON.put("time", duration * 0.001) ;
-		resultJSON.put("recommend", recoListJSON);
 		resultJSON.put("sources", sourcesListJSON);
 		resultJSON.put("filterOption", filterOption);
 		return resultJSON;
 	}
 	
-	private JSONArray constructRecommendListJSON(List<ResultItem> recoList) {
-		JSONArray jsonArray = new JSONArray();
-		if(recoList == null) return jsonArray;
-		for(ResultItem reco : recoList) {
-			jsonArray.add(reco.toJSON());
-		}
-		return jsonArray;
-	}
-	
-
+	@SuppressWarnings("unchecked")
 	private JSONArray constructResultListJSON(List<ResultItem> resultList) {
 		JSONArray jsonArray = new JSONArray();
 		for(ResultItem result : resultList) {
@@ -210,6 +198,7 @@ public class Search extends HttpServlet {
 		return jsonArray;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private JSONObject constructResultItemJSON(ResultItem resultItem) {
 		JSONObject item = new JSONObject();
 		String snippet = constructSnippet(resultItem.get("snippet"));
@@ -286,6 +275,7 @@ public class Search extends HttpServlet {
 		return sb.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	public JSONArray constructSourceListJSON(Set<String> sourcesSet) {
 		JSONArray array = new JSONArray(); if(sourcesSet == null) return array;
 		List<String> sourcesList = new ArrayList<String> (sourcesSet);
@@ -301,6 +291,7 @@ public class Search extends HttpServlet {
 		return array;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private JSONObject getClassFilterOption(List<ResultItem> results) {
 		JSONObject filterOption = new JSONObject();
 		Map<String, Integer> classMap = FacetService.constructFacet(results);

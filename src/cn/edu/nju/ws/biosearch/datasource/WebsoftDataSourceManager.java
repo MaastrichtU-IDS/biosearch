@@ -19,7 +19,7 @@ import com.hp.hpl.jena.shared.JenaException;
  */
 public class WebsoftDataSourceManager implements IDataSource {
 	
-	private static WebsoftDataSourceManager inst = null;
+	private static volatile WebsoftDataSourceManager inst = null;
 	private Set<String> sourceNames;
 	private Map<String, String> urlMap;
 	private Map<String, String> graphMap;
@@ -28,7 +28,11 @@ public class WebsoftDataSourceManager implements IDataSource {
 	
 	public static WebsoftDataSourceManager getInstance() {
 		if(inst == null) {
-			inst = new WebsoftDataSourceManager();
+			synchronized(WebsoftDataSourceManager.class) {
+				if(inst == null) {
+					inst = new WebsoftDataSourceManager();
+				}
+			}
 		}
 		return inst;
 	}

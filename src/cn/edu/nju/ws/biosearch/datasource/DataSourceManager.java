@@ -19,7 +19,7 @@ import com.hp.hpl.jena.shared.JenaException;
  */
 public class DataSourceManager implements IDataSource {
 	
-	private static DataSourceManager inst = null;
+	private static volatile DataSourceManager inst = null;
 	private Set<String> sourceNames;
 	private String url;
 	private String user;
@@ -28,7 +28,11 @@ public class DataSourceManager implements IDataSource {
 	
 	public static DataSourceManager getInstance() {
 		if(inst == null) {
-			inst = new DataSourceManager();
+			synchronized(DataSourceManager.class) {
+				if(inst == null) {
+					inst = new DataSourceManager();
+				}
+			}
 		}
 		return inst;
 	}

@@ -46,9 +46,6 @@ function parseResult(json) {
 	img = json['img'];
 	constructInstancePane(sentenceArray);
 	console.log(json);
-	constructRecommendList(json['recommend']);
-	constructCoreferenceList(json['coreference']);
-	constructReferenceList(json['reference']);
 	getTraceFromCookie();
 	setTraceToCookie();
 	constructBreadcrumb();
@@ -220,42 +217,6 @@ function appendPropValue(liElement, value) {
 	liElement.append($('<span>').html(value));
 }
 
-function constructReferenceList(refList) {
-	var ulElement = $('#intelList');
-	$.each(refList, function(index, val) {
-		var liElement = constructReference(index, val);
-		ulElement.append(liElement);
-	});
-	if(refList.length > 0) {
-		$('#intelPane').fadeIn();
-	}
-	else {
-		$('#intelPane').hide();
-	}
-}
-
-function constructReference(index, ref) {
-	var id = ref['id'];
-	var liElement = $('<li>');
-	liElement.hide();	
-	$.getJSON('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' + id, function (summary) {
-		var citation = '';
-		for(author in summary.result[id].authors){
-			citation += summary.result[id].authors[author].name+', ';
-		}
-		citation +='<a href="http://www.ncbi.nlm.nih.gov/pubmed/' + id + '" target="_blank">'+summary.result[id].title+'</a>';
-		citation += '\" <i>' + summary.result[id].fulljournalname + '</i> ';
-		citation += summary.result[id].volume + '.' + summary.result[id].issue;
-		citation += ' (' + summary.result[id].pubdate + '): ';
-		citation += summary.result[id].pages + '.';
-		liElement.append(citation);
-		var aElement = $();
-		liElement.show();
-	
-	});
-	return liElement;
-}
-
 function constructIntelSnippet(content) {
 	var startIndex = content.indexOf('<span class="hitted">');
 	var endIndex = content.indexOf('</span>');
@@ -270,22 +231,6 @@ function constructIntelSnippet(content) {
 	}
 
 	return snippet;
-}
-
-function constructCoreferenceList(corefArray) {
-	var corefPane = $('#coreferencePane');
-	var corefList = $('<ul>');
-	for(var i = 0; i < corefArray.length; i++) {
-		var liElement = constructCoreference(corefArray[i]);
-		corefList.append(liElement);
-	}
-	corefPane.append(corefList);
-	if(corefArray.length > 0) {
-		corefPane.fadeIn();
-	}
-	else {
-		corefPane.hide();
-	}
 }
 
 function constructCoreference(coref) {
@@ -304,45 +249,6 @@ function constructCoreference(coref) {
 						class: 'typeSpan'
 						}).appendTo(liElement);
 	liElement.append($('<br>'));
-	return liElement;
-}
-
-function constructRecommendList(recoArray) {
-	var recommendPane = $('#recommendPane');
-	var recommendList = $('<ul>');
-	for(var i = 0; i < recoArray.length; i++) {
-		var liElement = constructRecommend(recoArray[i]);
-		recommendList.append(liElement);
-	}
-	recommendPane.append(recommendList);
-	
-	if(recoArray.length > 0) {
-		recommendPane.fadeIn();
-	}
-	else {
-		recommendPane.hide();
-	}
-}
-
-function constructRecommend(recommend) {
-	var instanceViewerURL = 'instance.html?inst=';
-	var liElement = $('<li>');
-	var aElement = $('<a>', {
-						text: recommend['label'],
-						href: instanceViewerURL + recommend['uri']
-					}).appendTo(liElement);
-	aElement.click(function () {
-		setTraceRelation(recommend['reason']);
-	})
-	liElement.append($('<br>'));
-	var spanElement = $('<span>', {
-						text: recommend['typeLabel'],
-						class: 'typeSpan'
-						}).appendTo(liElement);
-	liElement.append($('<br>'));
-	var reasonSpanElement = $('<span>', {
-		text: recommend['reason'],
-	}).appendTo(liElement);
 	return liElement;
 }
 

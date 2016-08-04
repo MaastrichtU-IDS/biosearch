@@ -6,12 +6,16 @@ import java.util.Collections;
 import java.util.Properties;
 
 public class ClassGroup {
-	private static ClassGroup inst = null;
+	private static volatile ClassGroup inst = null;
 	private ArrayList<String> classGroups;
 	
 	public static ClassGroup getInstance() {
 		if(inst == null) {
-			inst = new ClassGroup();
+			synchronized(ClassGroup.class) {
+				if(inst == null) {
+					inst = new ClassGroup();
+				}
+			}
 		}
 		return inst;
 	}

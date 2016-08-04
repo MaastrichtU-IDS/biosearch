@@ -8,12 +8,16 @@ import cn.edu.nju.ws.biosearch.datasource.DataSourceManager;
 
 public class ExecutorManager {
 	private Map<String, SPARQLQueryExecutor> executors;
-	private static ExecutorManager instance = null;
+	private static volatile ExecutorManager inst = null;
 	
 	public static ExecutorManager getInstance() {
-		if(instance == null)
-			instance = new ExecutorManager();
-		return instance;
+		if(inst == null)
+			synchronized(ExecutorManager.class) {
+				if(inst == null) {
+					inst = new ExecutorManager();
+				}
+			}
+		return inst;
 	}
 	
 	private ExecutorManager() {

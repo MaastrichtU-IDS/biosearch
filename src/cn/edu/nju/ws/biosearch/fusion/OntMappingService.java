@@ -13,11 +13,16 @@ import cn.edu.nju.ws.biosearch.datasource.DataSourceManager;
 public class OntMappingService {
 	private Map<String, Map<String, HashSet<String>>> mappings;
 	private Set<String> mapped;
-	private static OntMappingService inst = null;
+	private static volatile OntMappingService inst = null;
 	
 	public static OntMappingService getInstance() {
-		if(inst == null)
-			inst = new OntMappingService();
+		if(inst == null) {
+			synchronized(OntMappingService.class) {
+				if(inst == null) {
+					inst = new OntMappingService();
+				}
+			}
+		}
 		return inst;
 	}
 

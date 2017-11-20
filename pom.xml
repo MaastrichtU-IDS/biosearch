@@ -59,6 +59,9 @@
             <configuration>
                 <source>1.8</source>
                 <target>1.8</target>
+                <includes>
+                    <include>src/main/webapp/WEB-INF/lib/*.jar</include>
+                </includes>
             </configuration>
         </plugin>
     </plugins>

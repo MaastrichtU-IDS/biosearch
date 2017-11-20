@@ -13,10 +13,18 @@ public class Config implements ServletContextListener {
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
     public void contextInitialized(ServletContextEvent event) {
-    	logger.info("Starting to load OntManager. This can take a couple of minutes");
+    	String logo = "______ _                               _     \n" +
+	    	"| ___ (_)                             | |    \n" +
+	    	"| |_/ /_  ___  ___  ___  __ _ _ __ ___| |__  \n" +
+	    	"| ___ \\ |/ _ \\/ __|/ _ \\/ _` | '__/ __| '_ \\ \n" +
+	    	"| |_/ / | (_) \\__ \\  __/ (_| | | | (__| | | |\n" +
+	    	"\\____/|_|\\___/|___/\\___|\\__,_|_|  \\___|_| |_|";
+    	System.out.println(logo);
+    	
+    	System.out.println("Starting to load OntManager. This can take a couple of minutes");
 		long start = System.currentTimeMillis();
         OntManager.getInstance();
-        logger.info("OntManager loaded (" + ((System.currentTimeMillis() - start)/1000) + " s)");
+        System.out.println("OntManager loaded (" + ((System.currentTimeMillis() - start)/1000) + " s)");
     }
     
     public void contextDestroyed(ServletContextEvent event) {

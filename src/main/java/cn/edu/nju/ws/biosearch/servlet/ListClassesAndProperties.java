@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,17 +15,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntProperty;
+
 import cn.edu.nju.ws.biosearch.datasource.DataSourceManager;
 import cn.edu.nju.ws.biosearch.fusion.OntMappingService;
 import cn.edu.nju.ws.biosearch.ontology.OntManager;
 
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntProperty;
-
 /**
  * Servlet implementation class ListClassesAndProperties
  */
-//@WebServlet("/listClassesAndProperties")
+@WebServlet("/listClassesAndProperties")
 public class ListClassesAndProperties extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

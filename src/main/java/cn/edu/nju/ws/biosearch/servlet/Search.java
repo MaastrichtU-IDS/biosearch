@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +34,7 @@ import cn.edu.nju.ws.biosearch.utils.Config;
 /**
  * Servlet implementation class Search
  */
-//@WebServlet("/search")
+@WebServlet("/search")
 public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Set<String> reqPlainList;

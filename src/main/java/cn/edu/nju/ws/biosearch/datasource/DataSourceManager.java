@@ -67,7 +67,7 @@ public class DataSourceManager implements IDataSource {
 			url = (String) props.get("endpoint_URL");
 			user = (String) props.get("endpoint_USER");
 			passwd = (String) props.get("endpoint_PASSWD");
-			System.out.println(url+" "+user+" "+passwd);
+			//System.out.println(url+" "+user+" "+passwd);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

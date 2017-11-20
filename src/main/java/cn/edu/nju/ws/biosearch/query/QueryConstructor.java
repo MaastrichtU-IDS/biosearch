@@ -67,7 +67,7 @@ public class QueryConstructor {
 		} else if(propertiesSize == 0) {
 			return String.format("select distinct(?s),?p,?lo where {\n%s} limit 100", sb.toString());
 		}
-		return String.format("select distinct(?s),?o,?p,?pc,?lo where {\n%s} limit 100", sb.toString());
+		return String.format("select distinct(?s),?o,?p,?pc,?lo where {\n%s} limit 1", sb.toString());
 	}
 
 

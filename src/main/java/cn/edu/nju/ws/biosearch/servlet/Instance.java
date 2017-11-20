@@ -8,12 +8,20 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import cn.edu.nju.ws.biosearch.executor.ExecutorManager;
 import cn.edu.nju.ws.biosearch.executor.SPARQLQueryExecutor;
@@ -24,17 +32,10 @@ import cn.edu.nju.ws.biosearch.query.DatasetService;
 import cn.edu.nju.ws.biosearch.query.ImageService;
 import cn.edu.nju.ws.biosearch.query.ResultItem;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-
 /**
  * Servlet implementation class Instance
  */
-//@WebServlet("/instance")
+@WebServlet("/instance")
 public class Instance extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

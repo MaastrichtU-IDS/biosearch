@@ -1,5 +1,0 @@
-http://bio2rdf.org/kegg_vocabulary:Disease
-Disease-Gene
-select distinct(?reco) where {
-	<%s> <http://bio2rdf.org/kegg_vocabulary:ko-gene> ?reco.
-} limit 3

@@ -1,8 +1,0 @@
-http://bio2rdf.org/pharmgkb_vocabulary:Resource http://semanticscience.org/resource/SIO_000000
-http://bio2rdf.org/pharmgkb_vocabulary:Drug http://semanticscience.org/resource/SIO_010038
-http://bio2rdf.org/pharmgkb_vocabulary:Drug http://semanticscience.org/resource/SIO_011125
-http://bio2rdf.org/pharmgkb_vocabulary:Gene http://semanticscience.org/resource/SIO_010035
-http://bio2rdf.org/pharmgkb_vocabulary:Disease http://semanticscience.org/resource/SIO_010299
-http://bio2rdf.org/pharmgkb_vocabulary:drug-gene-Association http://semanticscience.org/resource/SIO_001257
-http://bio2rdf.org/pharmgkb_vocabulary:gene-disease-Association http://semanticscience.org/resource/SIO_000983
-http://bio2rdf.org/pharmgkb_vocabulary:disease-gene-Association http://semanticscience.org/resource/SIO_000983

@@ -1,6 +1,0 @@
-http://bio2rdf.org/kegg_vocabulary:Drug
-kegg Drug Ref
-select distinct(?reco) where {
-	<%s> <http://bio2rdf.org/kegg_vocabulary:reference> ?o.
-	?o <http://bio2rdf.org/kegg_vocabulary:x-pubmed> ?reco.
-} limit 5

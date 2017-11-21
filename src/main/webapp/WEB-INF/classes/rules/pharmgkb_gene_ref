@@ -1,6 +1,0 @@
-http://bio2rdf.org/pharmgkb_vocabulary:Gene
-pharmgkb Gene Ref
-select distinct(?reco) where {
-	?r <http://bio2rdf.org/pharmgkb_vocabulary:gene> <%s>.
-	?r <http://bio2rdf.org/pharmgkb_vocabulary:article> ?reco.
-} limit 5

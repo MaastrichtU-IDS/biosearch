@@ -1,15 +1,14 @@
-FROM freedomkk/tomcat-maven:7
+FROM freedomkk/tomcat-maven:8
 
 ENV BUILD_DIR /tmp/biosearch
 
-RUN apt update && \
-  apt install nano -y && \
-  alias ll="ls -al"
+#RUN apt update && apt install nano -y 
 
-RUN cd /tmp && \
-  git clone -b maven https://alexander.malic%40gmail.com:XXXXX@github.com/micheldumontier/biosearch.git
+#RUN mkdir BUILD_DIR 
   
 WORKDIR $BUILD_DIR
+
+COPY . $BUILD_DIR
 
 RUN sed -i 's/171.67.213.159/virtuoso/g' src/main/resources/config/datasource.properties && \
   mvn compile war:war && \

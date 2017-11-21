@@ -1,5 +1,0 @@
-http://bio2rdf.org/pharmgkb_vocabulary:Drug
-Drug & Gene
-select distinct(?reco) where {
-	<%s> <http://bio2rdf.org/pharmgkb_vocabulary:gene> ?reco.
-} limit 3

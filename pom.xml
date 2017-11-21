@@ -50,31 +50,34 @@
     	<version>3.0.1</version>
     	<scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>virtuoso</groupId>
+      <artifactId>virt_jena2</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/virt_jena2.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>virtuoso</groupId>
+      <artifactId>virtjdbc4</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/virtjdbc4.jar</systemPath>
+    </dependency>
   </dependencies>
   <build>
     <finalName>biosearch</finalName>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-compiler-plugin</artifactId>
-	<version>3.1</version>
-	<configuration>
-	  <source>1.8</source>
-	  <target>1.8</target>
-	</configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.15</version>
+      <!--plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-        <skipTests>true</skipTests>
-	</configuration>
-      </plugin>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin-->
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.2.1</version>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.2.0</version>
       </plugin>
     </plugins>
   </build>

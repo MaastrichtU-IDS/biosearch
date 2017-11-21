@@ -1,6 +1,0 @@
-http://bio2rdf.org/drugbank_vocabulary:Drug
-drugbank Drug Ref
-select distinct(?reco) where {
-	?r <http://bio2rdf.org/drugbank_vocabulary:drug> <%s>.
-	?r <http://bio2rdf.org/drugbank_vocabulary:reference> ?reco.
-} limit 5

@@ -35,7 +35,7 @@ import cn.edu.nju.ws.biosearch.query.ResultItem;
 /**
  * Servlet implementation class Instance
  */
-@WebServlet("/instance")
+@WebServlet(name="Instance", displayName="Instance", urlPatterns={"/instance"})
 public class Instance extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

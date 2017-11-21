@@ -11,7 +11,8 @@ WORKDIR $BUILD_DIR
 COPY . $BUILD_DIR
 
 RUN sed -i 's/171.67.213.159/virtuoso/g' src/main/resources/config/datasource.properties && \
-  mvn compile war:war && \
+  mvn clean && \
+  mvn compile war:war -e && \
   cp target/biosearch.war $CATALINA_HOME/webapps/
   
 WORKDIR $CATALINA_HOME

@@ -25,7 +25,7 @@ import cn.edu.nju.ws.biosearch.ontology.OntManager;
 /**
  * Servlet implementation class ListClassesAndProperties
  */
-@WebServlet("/listClassesAndProperties")
+@WebServlet(name="ListClassesAndProperties", displayName="ListClassesAndProperties", urlPatterns={"/listClassesAndProperties"})
 public class ListClassesAndProperties extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

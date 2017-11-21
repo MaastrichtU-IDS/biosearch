@@ -34,7 +34,7 @@ import cn.edu.nju.ws.biosearch.utils.Config;
 /**
  * Servlet implementation class Search
  */
-@WebServlet("/search")
+@WebServlet(name="SerachServlet", displayName="SearchServlet", urlPatterns={"/search"})
 public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Set<String> reqPlainList;

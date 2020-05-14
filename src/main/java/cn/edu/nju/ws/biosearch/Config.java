@@ -3,6 +3,7 @@ package cn.edu.nju.ws.biosearch;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import javax.servlet.ServletRegistration;
 
 import org.apache.log4j.Logger;
 
@@ -13,6 +14,11 @@ public class Config implements ServletContextListener {
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
     public void contextInitialized(ServletContextEvent event) {
+    	for (String key: event.getServletContext().getServletRegistrations().keySet()) {
+	    ServletRegistration sr = event.getServletContext().getServletRegistrations().get(key);
+    	    System.out.println(sr.getClassName() + " -> " + sr.getName() + " -> " + sr.getMappings());
+    	}
+    
     	String logo = "______ _                               _     \n" +
 	    	"| ___ (_)                             | |    \n" +
 	    	"| |_/ /_  ___  ___  ___  __ _ _ __ ___| |__  \n" +
@@ -20,6 +26,7 @@ public class Config implements ServletContextListener {
 	    	"| |_/ / | (_) \\__ \\  __/ (_| | | | (__| | | |\n" +
 	    	"\\____/|_|\\___/|___/\\___|\\__,_|_|  \\___|_| |_|";
     	System.out.println(logo);
+    	
     	
     	System.out.println("Starting to load OntManager. This can take a couple of minutes");
 		long start = System.currentTimeMillis();

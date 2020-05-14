@@ -34,7 +34,7 @@ import cn.edu.nju.ws.biosearch.utils.Config;
 /**
  * Servlet implementation class Search
  */
-@WebServlet(name="SerachServlet", displayName="SearchServlet", urlPatterns={"/search"})
+@WebServlet(name="SerachServlet", displayName="Search", urlPatterns={"/search"}, loadOnStartup=1)
 public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Set<String> reqPlainList;
@@ -56,6 +56,7 @@ public class Search extends HttpServlet {
     
 	@Override
 	public void init() throws ServletException {
+		System.out.println("SearchServlet: " + this.getServletInfo());
 		super.init();
 		Config conf = new Config();
 		conf.setParams();

@@ -1,22 +1,23 @@
-FROM freedomkk/tomcat-maven:8
+FROM tomcat:8.0-jre8
+#FROM freedomkk/tomcat-maven:8
 
-ENV BUILD_DIR /tmp/biosearch
+#ENV BUILD_DIR /tmp/biosearch
 
-#RUN apt update && apt install nano -y 
+#WORKDIR $BUILD_DIR
 
-#RUN mkdir BUILD_DIR 
-  
-WORKDIR $BUILD_DIR
+#COPY . $BUILD_DIR
+#
+#RUN sed -i 's/171.67.213.159/virtuoso/g' src/main/resources/config/datasource.properties && \
+#  mvn clean && \
+#  mvn compile war:war -e && \
+#  cp target/biosearch.war $CATALINA_HOME/webapps/
 
-COPY . $BUILD_DIR
-
-RUN sed -i 's/171.67.213.159/virtuoso/g' src/main/resources/config/datasource.properties && \
-  mvn clean && \
-  mvn compile war:war -e && \
-  cp target/biosearch.war $CATALINA_HOME/webapps/
+COPY biosearch.war $CATALINA_HOME/webapps/
   
 WORKDIR $CATALINA_HOME
 
-CMD ["bin/catalina.sh", "run"]
+RUN rm -rf $BUILD_DIR
+
+CMD ["catalina.sh", "run"]
 
 EXPOSE 8080

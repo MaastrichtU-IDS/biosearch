@@ -12,6 +12,8 @@ FROM tomcat:8.0-jre8
 #  mvn compile war:war -e && \
 #  cp target/biosearch.war $CATALINA_HOME/webapps/
 
+ENV LOG4J_FORMAT_MSG_NO_LOOKUPS=true
+
 COPY biosearch.war $CATALINA_HOME/webapps/
   
 WORKDIR $CATALINA_HOME
